@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statepubsubmodel:MiddlewareNetwork xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:statepubsubmodel="http://jkk.sze.hu/statepubsubmodel" xsi:schemaLocation="http://jkk.sze.hu/statepubsubmodel ../../hu.sze.jkk.middleware.statepubsub.model/model/statepubsubmodel.ecore">
+  <node name="Vizualizer">
+    <outputport id="Output name"/>
+    <inputport id="sub_camera"/>
+    <inputport id="sub_current_velocity"/>
+    <inputport id="sub_current_pose"/>
+  </node>
+</statepubsubmodel:MiddlewareNetwork>

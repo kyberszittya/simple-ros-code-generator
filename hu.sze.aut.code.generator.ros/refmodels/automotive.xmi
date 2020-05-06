@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rosnetworkmodel:Network
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rosnetworkmodel="http://jkk.sze.hu/rosnetworkmodel"
+    xsi:schemaLocation="http://jkk.sze.hu/rosnetworkmodel ../../hu.sze.aut.ros.network.model/model/rosnetworkmodel.ecore">
+  <topic name="base_waypoints">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.2/@rosmsg.0"/>
+  </topic>
+  <topic name="current_velocity">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.0/@rosmsg.1"/>
+  </topic>
+  <topic name="current_pose">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.0/@rosmsg.0"/>
+  </topic>
+  <topic name="final_waypoints">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.2/@rosmsg.0"/>
+  </topic>
+  <topic name="replan_request_sig">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.3/@rosmsg.0"/>
+  </topic>
+  <topic name="filtered_obstacles">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.5/@rosmsg.0"/>
+  </topic>
+  <topic name="closest_waypoint">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.1/@rosmsg.0"/>
+  </topic>
+  <topic name="traffic_lane_array">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.2/@rosmsg.1"/>
+  </topic>
+  <topic name="obstacles_perimeter">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.5/@rosmsg.0"/>
+  </topic>
+  <topic name="fused_grid_map">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.6/@rosmsg.0"/>
+  </topic>
+  <topic name="input_trajectory">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.7/@rosmsg.0"/>
+  </topic>
+  <topic name="refined_trajectory">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.7/@rosmsg.0"/>
+  </topic>
+  <topic name="calc_planner_time">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.1/@rosmsg.1"/>
+  </topic>
+  <topic name="rei_perception_monitor/detected_obstacles">
+    <rosmsg
+        href="rosmsgdefinitions.xmi#//@package.4/@rosmsg.2"/>
+  </topic>
+</rosnetworkmodel:Network>

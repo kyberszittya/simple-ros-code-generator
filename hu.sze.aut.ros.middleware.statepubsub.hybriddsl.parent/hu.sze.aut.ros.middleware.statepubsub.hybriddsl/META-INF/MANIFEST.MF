@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: hu.sze.aut.ros.middleware.statepubsub.hybriddsl
+Bundle-ManifestVersion: 2
+Bundle-Name: hu.sze.aut.ros.middleware.statepubsub.hybriddsl
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: hu.sze.aut.ros.middleware.statepubsub.hybriddsl; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: hu.sze.jkk.middleware.statepubsub.model,
+ org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
+ hu.sze.aut.code.generator.ros;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: hu.sze.aut.ros.middleware.statepubsub.validation,
+ hu.sze.aut.ros.middleware.statepubsub.parser.antlr.internal,
+ hu.sze.aut.ros.middleware.statepubsub.formatting2,
+ hu.sze.aut.ros.middleware.statepubsub,
+ hu.sze.aut.ros.middleware.statepubsub.services,
+ hu.sze.aut.ros.middleware.statepubsub.generator,
+ hu.sze.aut.ros.middleware.statepubsub.scoping,
+ hu.sze.aut.ros.middleware.statepubsub.serializer,
+ hu.sze.aut.ros.middleware.statepubsub.parser.antlr
+Import-Package: org.apache.log4j

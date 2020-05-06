@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+  <extension point="org.eclipse.sirius.componentization">
+    <component class="hu.sze.aut.ros.network.model.design.Activator"
+               id="hu.sze.aut.ros.network.model.design"
+	       name="rosnetwork">
+    </component>
+  </extension>
+</plugin>

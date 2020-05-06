@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rosnetworkmodel" nsURI="http://jkk.sze.hu/rosnetworkmodel" nsPrefix="rosnetworkmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//NetworkElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Topic" eSuperTypes="#//NetworkElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rosmsg" eType="#//RosMsg"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Network">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" upperBound="-1" eType="#//Node"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="topic" upperBound="-1"
+        eType="#//Topic" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NetworkElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MsgDefinitions">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" upperBound="-1"
+        eType="#//Package" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subpackage" upperBound="-1"
+        eType="#//Package" containment="true" eOpposite="#//Package/package"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rosmsg" upperBound="-1"
+        eType="#//RosMsg" containment="true" eOpposite="#//RosMsg/package"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//Package"
+        eOpposite="#//Package/subpackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RosMsg">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stamped" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//Package"
+        eOpposite="#//Package/rosmsg"/>
+  </eClassifiers>
+</ecore:EPackage>

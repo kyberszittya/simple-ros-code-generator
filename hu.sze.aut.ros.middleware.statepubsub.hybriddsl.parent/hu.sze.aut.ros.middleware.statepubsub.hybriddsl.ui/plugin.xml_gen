@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="true"
+			extensions="hybridbehavior"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			name="HybridDsl Editor">
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.validate">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<!-- copy qualified name -->
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+			<activeWhen>
+				<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+			<activeWhen>
+				<and>
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.XtextEditor.opened" />
+					<iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+			<and>
+				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+		<definition id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.XtextEditor.opened">
+			<and>
+				<reference definitionId="isXtextEditorActive"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+	</extension>
+	<extension
+			point="org.eclipse.ui.preferencePages">
+		<page
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			name="HybridDsl">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+		</page>
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.coloring"
+			name="Syntax Coloring">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+		</page>
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.templates"
+			name="Templates">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+		</page>
+	</extension>
+	<extension
+			point="org.eclipse.ui.propertyPages">
+		<page
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			name="HybridDsl">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.keywords">
+		<keyword
+			id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"
+			label="HybridDsl"/>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Trigger expensive validation"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.validate"
+			name="Validate">
+		</command>
+		<!-- copy qualified name -->
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command
+				commandId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.validate"
+				style="push"
+				tooltip="Trigger expensive validation">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<!-- copy qualified name -->
+		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="menu:edit?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			commandId="org.eclipse.xtext.ui.editor.FindReferences">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="hybridbehavior"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.contenttype"
+			name="HybridDsl File"
+			priority="normal">
+		</content-type>
+	</extension>
+	<!-- adding resource factories -->
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="hybridbehavior">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="hybridbehavior">
+		</resourceServiceProvider>
+	</extension>
+	<!-- marker definitions for hu.sze.aut.ros.middleware.statepubsub.HybridDsl -->
+	<extension
+			id="hybriddsl.check.fast"
+			name="HybridDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="hybriddsl.check.normal"
+			name="HybridDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="hybriddsl.check.expensive"
+			name="HybridDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.xtext.builder.participant">
+		<participant
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			fileExtensions="hybridbehavior"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.compiler.preferencePage"
+			name="Compiler">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.compiler.propertyPage"
+			name="Compiler">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+			<command
+				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+				id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.OpenGeneratedCode"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+			<activeWhen>
+				<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+	</extension>
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<!-- quickfix marker resolution generator for hu.sze.aut.ros.middleware.statepubsub.HybridDsl -->
+	<extension
+			point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui.hybriddsl.check.fast">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui.hybriddsl.check.normal">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui.hybriddsl.check.expensive">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+	</extension>
+	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.HybridDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.refactoring"
+			name="Refactoring">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_HybridDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.compare.contentViewers">
+		<viewer id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.compare.contentViewers"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="hybridbehavior">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.contenttype"
+			contentViewerId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.compare.contentViewers" />
+	</extension>
+	<extension point="org.eclipse.compare.contentMergeViewers">
+		<viewer id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.compare.contentMergeViewers"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="hybridbehavior" label="HybridDsl Compare">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.contenttype"
+			contentMergeViewerId="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.compare.contentMergeViewers" />
+	</extension>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+		<provider id="hu.sze.aut.ros.middleware.statepubsub.HybridDsl.editors.documentProviders"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.HybridDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+			extensions="hybridbehavior">
+		</provider>
+	</extension>
+	<extension point="org.eclipse.team.core.fileTypes">
+		<fileTypes
+			extension="hybridbehavior"
+			type="text">
+		</fileTypes>
+	</extension>
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="true"
+			extensions="rosnetwork"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			name="RosNetworkDsl Editor">
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.validate">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<!-- copy qualified name -->
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+			<activeWhen>
+				<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+			<activeWhen>
+				<and>
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.XtextEditor.opened" />
+					<iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+			<and>
+				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+		<definition id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.XtextEditor.opened">
+			<and>
+				<reference definitionId="isXtextEditorActive"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+	</extension>
+	<extension
+			point="org.eclipse.ui.preferencePages">
+		<page
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			name="RosNetworkDsl">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+		</page>
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.coloring"
+			name="Syntax Coloring">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+		</page>
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.templates"
+			name="Templates">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+		</page>
+	</extension>
+	<extension
+			point="org.eclipse.ui.propertyPages">
+		<page
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			name="RosNetworkDsl">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.keywords">
+		<keyword
+			id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"
+			label="RosNetworkDsl"/>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Trigger expensive validation"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.validate"
+			name="Validate">
+		</command>
+		<!-- copy qualified name -->
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command
+				commandId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.validate"
+				style="push"
+				tooltip="Trigger expensive validation">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<!-- copy qualified name -->
+		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="menu:edit?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			commandId="org.eclipse.xtext.ui.editor.FindReferences">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="rosnetwork"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.contenttype"
+			name="RosNetworkDsl File"
+			priority="normal">
+		</content-type>
+	</extension>
+	<!-- adding resource factories -->
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="rosnetwork">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="rosnetwork">
+		</resourceServiceProvider>
+	</extension>
+	<!-- marker definitions for hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl -->
+	<extension
+			id="rosnetworkdsl.check.fast"
+			name="RosNetworkDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="rosnetworkdsl.check.normal"
+			name="RosNetworkDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="rosnetworkdsl.check.expensive"
+			name="RosNetworkDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.xtext.builder.participant">
+		<participant
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			fileExtensions="rosnetwork"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.compiler.preferencePage"
+			name="Compiler">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.compiler.propertyPage"
+			name="Compiler">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+			<command
+				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+				id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.OpenGeneratedCode"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+			<activeWhen>
+				<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+	</extension>
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<!-- quickfix marker resolution generator for hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl -->
+	<extension
+			point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui.rosnetworkdsl.check.fast">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui.rosnetworkdsl.check.normal">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui.rosnetworkdsl.check.expensive">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+	</extension>
+	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.refactoring"
+			name="Refactoring">
+			<keywordReference id="hu.sze.aut.ros.middleware.statepubsub.ui.keyword_RosNetworkDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.compare.contentViewers">
+		<viewer id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.compare.contentViewers"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="rosnetwork">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.contenttype"
+			contentViewerId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.compare.contentViewers" />
+	</extension>
+	<extension point="org.eclipse.compare.contentMergeViewers">
+		<viewer id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.compare.contentMergeViewers"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="rosnetwork" label="RosNetworkDsl Compare">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.contenttype"
+			contentMergeViewerId="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.compare.contentMergeViewers" />
+	</extension>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+		<provider id="hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl.editors.documentProviders"
+			class="hu.sze.aut.ros.middleware.statepubsub.ui.RosNetworkDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+			extensions="rosnetwork">
+		</provider>
+	</extension>
+	<extension point="org.eclipse.team.core.fileTypes">
+		<fileTypes
+			extension="rosnetwork"
+			type="text">
+		</fileTypes>
+	</extension>
+</plugin>

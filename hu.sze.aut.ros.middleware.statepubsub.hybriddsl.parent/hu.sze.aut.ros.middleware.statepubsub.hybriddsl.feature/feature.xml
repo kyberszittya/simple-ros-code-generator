@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.feature"
+	label="HybridDsl Feature "
+	version="1.0.0.qualifier">
+	<plugin
+			id="hu.sze.aut.ros.middleware.statepubsub.hybriddsl"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ide"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="hu.sze.aut.ros.middleware.statepubsub.hybriddsl.ui"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+</feature>

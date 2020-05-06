@@ -1,0 +1,148 @@
+grammar hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl with org.eclipse.xtext.common.Terminals
+
+import "http://jkk.sze.hu/statepubsubmodel" 
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+MiddleWareNetwork returns MiddlewareNetwork:
+	{MiddlewareNetwork}
+	"network" name=EString
+	'{'
+		'networktype' networktype=NetworkType		
+		'topic_msgs'
+		'{'
+			topicmessage+=TopicMessage
+			(topicmessage+=TopicMessage)*
+		'}'
+		'topics'
+		'{'
+			topic+=Topic
+			(topic+=Topic)*
+		'}'
+		'nodes' 
+		'{'
+			node+=Node
+			(node+=Node)*
+		'}'
+		
+	'}'
+;
+
+NetworkType returns NetworkType:
+	'ROS1'|'ROS2'
+;
+
+TopicMessage returns TopicMessage:
+	{TopicMessage}
+	'messagetype' prefix=EString'/'name=EString
+;
+
+Topic returns Topic:
+	{Topic}
+	'topic' name=EString ':' type=[TopicMessage|EString]';'
+;
+
+NodeParameter returns NodeParameter:
+	DoubleParameter|IntegerParameter| BooleanParameter
+;
+
+BooleanParameter returns BooleanParameter:
+    {BooleanParameter}
+    "bool" name=EString '=' defaultval=EBoolean ('->' targetvar=EString)?
+;	
+	
+IntegerParameter returns IntegerParameter:
+	{IntegerParameter}
+	"int" name=EString '=' defaultval=EInt '<'minval=EInt','maxval=EInt'>' ('->' targetvar=EString)? 
+;
+	
+DoubleParameter	returns DoubleParameter:
+	{DoubleParameter}
+	"double" name=EString '=' defaultval=Double '<'minval=Double','maxval=Double'>' ('->' targetvar=EString)?
+;
+
+NodeParameterGroup returns NodeParameterGroup:
+	{NodeParameterGroup}
+	'parametergroup' name=EString ("configobject" config_obj=EString)? ("generate" generate_struct=EBoolean)?
+	'{'
+	nodeparameter+=NodeParameter
+	(nodeparameter+=NodeParameter)*
+	'}' 
+;
+
+
+AbstractNodeParameter returns AbstractNodeParameter:
+	NodeParameter | NodeParameterGroup
+; 
+
+Node returns Node:
+	{Node}
+	'node' name=EString 'in' rospackage=EString "namespace" namespace=EString
+	'{'
+		"language" language=LanguageType
+		('parameters'
+		'{'
+		nodeparameters+=AbstractNodeParameter
+		(nodeparameters+=AbstractNodeParameter)*
+		'}')?
+		("continuousstate"
+		'{'
+		continousstate+=ContinuousState
+		'}'
+		)?
+		("inputs"
+		'{'
+		inputport+=InputPort(inputport+=InputPort)*
+		'}')?
+		("outputs"
+		'{'
+		outputport+=OutputPort(outputport+=OutputPort)*
+		'}')?
+	'}'
+;
+
+ContinuousState returns ContinousState:
+	{ContinousState}
+	'continuousstate' name=EString ';'
+;
+
+LanguageType returns LanguageType:
+	'Python' | 'Cpp' 
+;
+
+
+InputPort returns InputPort:
+	{InputPort}
+	'inputport' id=EString 'from' topic=[Topic|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double)? 
+	'{'
+		('debug' debug=EBoolean)?
+		('continuousstate' continousState=[ContinousState|EString])?
+		('updatefunction' sync_function_name=EString)?
+		('syncstate' synchronizesState=[ContinousState|EString])?
+	'}'
+;
+
+OutputPort returns OutputPort:
+	{OutputPort}
+	'outputport' id=EString 'to' topic=[Topic|EString] ('estimated_freq' estimated_freq=EInt)
+	'{'
+		('debug' debug=EBoolean)?
+		('continuousstate' continousState=[ContinousState|EString])?
+		
+	'}'
+;
+
+EBoolean returns ecore::EBoolean: 
+	'true' | 'false'	
+;
+
+
+EInt returns ecore::EInt:
+	INT
+;
+
+Double returns ecore::EDouble:
+	INT '.' INT
+;
+
+EString returns ecore::EString:
+	STRING | ID;

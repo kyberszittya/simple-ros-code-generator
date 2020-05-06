@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:statepubsubmodel="http://jkk.sze.hu/statepubsubmodel" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://jkk.sze.hu/statepubsubmodel platform:/resource/hu.sze.jkk.middleware.statepubsub.model/model/statepubsubmodel.ecore http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style">
+  <viewpoint:DAnalysis uid="_7O-NkFYxEeqdX4KhCzzKGw" selectedViews="_sJQ9QFYyEeqdX4KhCzzKGw" version="14.1.0.201810161215">
+    <semanticResources>model/Vizualizer.xmi</semanticResources>
+    <ownedViews xmi:type="viewpoint:DView" uid="_sJQ9QFYyEeqdX4KhCzzKGw">
+      <viewpoint xmi:type="description:Viewpoint" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']"/>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_scL5QFYyEeqdX4KhCzzKGw" name="new StatePubSubDiagram" repPath="#_scATEFYyEeqdX4KhCzzKGw">
+        <description xmi:type="description_1:DiagramDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']"/>
+        <target xmi:type="statepubsubmodel:MiddlewareNetwork" href="model/Vizualizer.xmi#/"/>
+      </ownedRepresentationDescriptors>
+    </ownedViews>
+  </viewpoint:DAnalysis>
+  <diagram:DSemanticDiagram uid="_scATEFYyEeqdX4KhCzzKGw" name="new StatePubSubDiagram">
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_scI18FYyEeqdX4KhCzzKGw" source="DANNOTATION_CUSTOMIZATION_KEY">
+      <data xmi:type="diagram:ComputedStyleDescriptionRegistry" uid="_scI18VYyEeqdX4KhCzzKGw"/>
+    </ownedAnnotationEntries>
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_scjFoFYyEeqdX4KhCzzKGw" source="GMF_DIAGRAMS">
+      <data xmi:type="notation:Diagram" xmi:id="_scjFoVYyEeqdX4KhCzzKGw" type="Sirius" element="_scATEFYyEeqdX4KhCzzKGw" measurementUnit="Pixel">
+        <children xmi:type="notation:Node" xmi:id="_tS5e0FYyEeqdX4KhCzzKGw" type="2002" element="_tSyKEFYyEeqdX4KhCzzKGw">
+          <children xmi:type="notation:Node" xmi:id="_tS7UAFYyEeqdX4KhCzzKGw" type="5006"/>
+          <children xmi:type="notation:Node" xmi:id="_tS77EFYyEeqdX4KhCzzKGw" type="7001">
+            <styles xmi:type="notation:SortingStyle" xmi:id="_tS77EVYyEeqdX4KhCzzKGw"/>
+            <styles xmi:type="notation:FilteringStyle" xmi:id="_tS77ElYyEeqdX4KhCzzKGw"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_vUQSkFYyEeqdX4KhCzzKGw" type="3012" element="_vUMBIFYyEeqdX4KhCzzKGw">
+            <children xmi:type="notation:Node" xmi:id="_vURgsFYyEeqdX4KhCzzKGw" type="5010">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_vURgsVYyEeqdX4KhCzzKGw" x="-49" y="12"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_vUUkAFYyEeqdX4KhCzzKGw" type="3003" element="_vUMBIVYyEeqdX4KhCzzKGw">
+              <styles xmi:type="notation:ShapeStyle" xmi:id="_vUUkAVYyEeqdX4KhCzzKGw" fontName="Segoe UI"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vUUkAlYyEeqdX4KhCzzKGw"/>
+            </children>
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_vUQSkVYyEeqdX4KhCzzKGw" fontName="Segoe UI" fontHeight="7"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vUQSklYyEeqdX4KhCzzKGw" x="-22" y="24" width="30" height="30"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_v_qnEFYyEeqdX4KhCzzKGw" type="3012" element="_v_m8sFYyEeqdX4KhCzzKGw">
+            <children xmi:type="notation:Node" xmi:id="_v_rOIFYyEeqdX4KhCzzKGw" type="5010">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_v_rOIVYyEeqdX4KhCzzKGw" x="-49" y="12"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_v_rOIlYyEeqdX4KhCzzKGw" type="3003" element="_v_m8sVYyEeqdX4KhCzzKGw">
+              <styles xmi:type="notation:ShapeStyle" xmi:id="_v_rOI1YyEeqdX4KhCzzKGw" fontName="Segoe UI"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_v_rOJFYyEeqdX4KhCzzKGw"/>
+            </children>
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_v_qnEVYyEeqdX4KhCzzKGw" fontName="Segoe UI" fontHeight="7"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_v_qnElYyEeqdX4KhCzzKGw" x="-22" y="60" width="30" height="30"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_xs5k8FYyEeqdX4KhCzzKGw" type="3012" element="_xs1TgFYyEeqdX4KhCzzKGw">
+            <children xmi:type="notation:Node" xmi:id="_xs5k81YyEeqdX4KhCzzKGw" type="5010">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_xs5k9FYyEeqdX4KhCzzKGw" x="31" y="5"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_xs6MAFYyEeqdX4KhCzzKGw" type="3017" element="_xs1TgVYyEeqdX4KhCzzKGw">
+              <styles xmi:type="notation:ShapeStyle" xmi:id="_xs6MAVYyEeqdX4KhCzzKGw" fontName="Segoe UI"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xs6MAlYyEeqdX4KhCzzKGw"/>
+            </children>
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_xs5k8VYyEeqdX4KhCzzKGw" fontName="Segoe UI" fontHeight="7"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xs5k8lYyEeqdX4KhCzzKGw" x="233" y="84" width="30" height="30"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_JFgqKlYzEeqdX4KhCzzKGw" type="3012" element="_JFajgFYzEeqdX4KhCzzKGw">
+            <children xmi:type="notation:Node" xmi:id="_JFgqLVYzEeqdX4KhCzzKGw" type="5010">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_JFgqLlYzEeqdX4KhCzzKGw" x="-89" y="11"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_JFjtcFYzEeqdX4KhCzzKGw" type="3003" element="_JFajgVYzEeqdX4KhCzzKGw">
+              <styles xmi:type="notation:ShapeStyle" xmi:id="_JFjtcVYzEeqdX4KhCzzKGw" fontName="Segoe UI"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_JFjtclYzEeqdX4KhCzzKGw"/>
+            </children>
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_JFgqK1YzEeqdX4KhCzzKGw" fontName="Segoe UI" fontHeight="7"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_JFgqLFYzEeqdX4KhCzzKGw" x="-22" y="96" width="30" height="30"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_tS5e0VYyEeqdX4KhCzzKGw" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tS5e0lYyEeqdX4KhCzzKGw" x="360" y="120" width="243" height="231"/>
+        </children>
+        <styles xmi:type="notation:DiagramStyle" xmi:id="_scjFolYyEeqdX4KhCzzKGw"/>
+      </data>
+    </ownedAnnotationEntries>
+    <ownedDiagramElements xmi:type="diagram:DNodeContainer" uid="_tSyKEFYyEeqdX4KhCzzKGw" name="Vizualizer">
+      <target xmi:type="statepubsubmodel:Node" href="model/Vizualizer.xmi#//@node.0"/>
+      <semanticElements xmi:type="statepubsubmodel:Node" href="model/Vizualizer.xmi#//@node.0"/>
+      <ownedBorderedNodes xmi:type="diagram:DNode" uid="_vUMBIFYyEeqdX4KhCzzKGw" name="sub_camera" width="3" height="3" resizeKind="NSEW">
+        <target xmi:type="statepubsubmodel:InputPort" href="model/Vizualizer.xmi#//@node.0/@inputport.0"/>
+        <semanticElements xmi:type="statepubsubmodel:InputPort" href="model/Vizualizer.xmi#//@node.0/@inputport.0"/>
+        <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+        <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+        <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+        <ownedStyle xmi:type="diagram:Square" uid="_vUMBIVYyEeqdX4KhCzzKGw" labelSize="7">
+          <description xmi:type="style:SquareDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Input%20port%20definition']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Input%20port%20definition']"/>
+      </ownedBorderedNodes>
+      <ownedBorderedNodes xmi:type="diagram:DNode" uid="_v_m8sFYyEeqdX4KhCzzKGw" name="sub_current_velocity" width="3" height="3" resizeKind="NSEW">
+        <target xmi:type="statepubsubmodel:InputPort" href="model/Vizualizer.xmi#//@node.0/@inputport.1"/>
+        <semanticElements xmi:type="statepubsubmodel:InputPort" href="model/Vizualizer.xmi#//@node.0/@inputport.1"/>
+        <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+        <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+        <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+        <ownedStyle xmi:type="diagram:Square" uid="_v_m8sVYyEeqdX4KhCzzKGw" labelSize="7">
+          <description xmi:type="style:SquareDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Input%20port%20definition']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Input%20port%20definition']"/>
+      </ownedBorderedNodes>
+      <ownedBorderedNodes xmi:type="diagram:DNode" uid="_xs1TgFYyEeqdX4KhCzzKGw" name="Output name" width="3" height="3" resizeKind="NSEW">
+        <target xmi:type="statepubsubmodel:OutputPort" href="model/Vizualizer.xmi#//@node.0/@outputport.0"/>
+        <semanticElements xmi:type="statepubsubmodel:OutputPort" href="model/Vizualizer.xmi#//@node.0/@outputport.0"/>
+        <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+        <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+        <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+        <ownedStyle xmi:type="diagram:Lozenge" uid="_xs1TgVYyEeqdX4KhCzzKGw" labelSize="7" color="252,233,79">
+          <description xmi:type="style:LozengeNodeDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Ouptut%20port%20definition']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Ouptut%20port%20definition']"/>
+      </ownedBorderedNodes>
+      <ownedBorderedNodes xmi:type="diagram:DNode" uid="_JFajgFYzEeqdX4KhCzzKGw" name="sub_current_pose" width="3" height="3" resizeKind="NSEW">
+        <target xmi:type="statepubsubmodel:InputPort" href="model/Vizualizer.xmi#//@node.0/@inputport.2"/>
+        <semanticElements xmi:type="statepubsubmodel:InputPort" href="model/Vizualizer.xmi#//@node.0/@inputport.2"/>
+        <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+        <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+        <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+        <ownedStyle xmi:type="diagram:Square" uid="_JFajgVYzEeqdX4KhCzzKGw" labelSize="7">
+          <description xmi:type="style:SquareDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Input%20port%20definition']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@borderedNodeMappings[name='Input%20port%20definition']"/>
+      </ownedBorderedNodes>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:FlatContainerStyle" uid="_tSyxIFYyEeqdX4KhCzzKGw" labelSize="12" borderSize="1" borderSizeComputationExpression="1">
+        <description xmi:type="style:FlatContainerStyleDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer/@containerMappings[name='Node%20definition']"/>
+    </ownedDiagramElements>
+    <description xmi:type="description_1:DiagramDescription" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']"/>
+    <filterVariableHistory xmi:type="diagram:FilterVariableHistory" uid="_scDWYFYyEeqdX4KhCzzKGw"/>
+    <activatedLayers xmi:type="description_1:Layer" href="platform:/resource/hu.sze.jkk.middleware.statepubsub.model.design/description/statepubsub.odesign#//@ownedViewpoints[name='StatePubSub']/@ownedRepresentations[name='StatePubSubDiagram']/@defaultLayer"/>
+    <target xmi:type="statepubsubmodel:MiddlewareNetwork" href="model/Vizualizer.xmi#/"/>
+  </diagram:DSemanticDiagram>
+</xmi:XMI>

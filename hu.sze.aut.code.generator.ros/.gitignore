@@ -1,0 +1,5 @@
+/src-gen/
+/xtend-gen/
+bin/
+.settings/
+/target/

@@ -1,0 +1,141 @@
+network hotaru
+{
+	networktype ROS1
+	topic_msgs
+	{
+		messagetype std_msgs/Int32
+		messagetype std_msgs/Float64
+		messagetype std_msgs/String
+		messagetype sensor_msgs/Image		
+		messagetype hotaru_msgs/RefinedTrajectory
+		messagetype geometry_msgs/PoseStamped
+		messagetype geometry_msgs/TwistStamped
+		// REI msgs
+		messagetype rei_planner_signals/ReplanRequest
+		messagetype rei_perception_msgs/DetectedObjects
+		
+	}
+	topics
+	{
+		topic "input_trajectory": RefinedTrajectory;
+		topic "current_pose": PoseStamped;
+		topic "current_velocity": TwistStamped;
+		topic "replan_request_sig": ReplanRequest;
+		topic "closest_waypoint": Int32;
+		topic "rei_perception_monitor/detected_obstacles": DetectedObjects;
+		topic "refined_trajectory": RefinedTrajectory;
+		topic "calc_planner_time": Float64;
+	}
+	nodes
+	{
+		node HotaruTebLocalPlannerNode in hotaru_planner_node_teb namespace hotaru
+		{
+			language Cpp
+			parameters
+			{
+				bool "debug" = true
+				bool "bypass_behavior" = false
+				parametergroup planner_setup generate true
+				{
+					double via_points_speed_linear_ratio = 1.5 <1.0, 2.0> -> "planner_config.via_points_speed_linear_ratio"
+				}
+				parametergroup robot
+				{
+					double wheelbase = 2.7 <2.7,2.7> -> "tebconfig.robot.wheelbase"
+					double min_turning_radius = 10.4 <10.4,10.4> -> "tebconfig.robot.min_turning_radius"
+					double max_vel_y = 0.0 <0.0,0.0> -> "tebconfig.robot.max_vel_y"
+					double acc_lim_theta = 0.05 <0.05, 0.05> -> "tebconfig.robot.acc_lim_theta"
+					double acc_lim_x = 0.2 <0.2, 0.3> -> "tebconfig.robot.acc_lim_x"
+					double max_vel_x_backwards = 0.01 <0.01, 0.001> -> "tebconfig.robot.max_vel_x_backwards"
+					bool cmd_angle_instead_rotvel = true -> "tebconfig.robot.cmd_angle_instead_rotvel"
+				}
+				parametergroup teb_setup
+				{
+					bool homotopy_enabled = false -> "tebconfig.hcp.enable_homotopy_class_planning"
+				}
+				parametergroup teb_trajectory
+				{
+					double dt_ref = 1.0 <0.7,2.0> -> "tebconfig.trajectory.dt_ref"
+					double dt_hysteresis = 0.1 <0.05, 0.2> -> "tebconfig.trajectory.dt_hysteresis"
+					double min_obstacle_distance = 0.5 <0.4,1.0> -> "tebconfig.obstacles.min_obstacle_dist"
+					double inflation_distance = 0.6 <0.5, 1.1> -> "tebconfig.obstacles.inflation_dist"
+					double xy_goal_tolerance = 0.4 <0.1, 0.5> -> "tebconfig.goal_tolerance.xy_goal_tolerance"
+					double yaw_goal_tolerance = 0.2 <0.1, 0.5> -> "tebconfig.goal_tolerance.yaw_goal_tolerance"
+				}
+				parametergroup teb_weights
+				{
+					double weight_obstacle = 40.0 <5.0, 100.0> -> "tebconfig.optim.weight_obstacle"
+					double weight_viapoints = 4.0 <1.0, 20.0> -> "tebconfig.optim.weight_viapoint"
+					double weight_optimaltime = 1.0 <1.0, 5.0> -> "tebconfig.optim.weight_optimaltime"
+					double weight_shortest_path = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_shortest_path"
+					double weight_kinematics_turning_radius = 10.0 <2.0, 20.0> -> "tebconfig.optim.weight_kinematics_turning_radius"
+					double weight_kinematics_forward_drive = 5.0 <2.0, 30.0> -> "tebconfig.optim.weight_kinematics_forward_drive"
+					double weight_kinematics_nh = 1000.0 <100.0, 1100.0>	-> "tebconfig.optim.weight_kinematics_nh"
+					double weight_max_vel_y = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_max_vel_y"
+				}
+			}	
+		}
+		
+		node AbstractHotaruPlannerNode in hotaru_node_elements namespace hotaru
+		{
+			language Cpp			
+			continuousstate
+			{
+				continuousstate pubsubstate;
+			}
+			inputs
+			{
+				inputport port_input_trajectory from input_trajectory estimated_freq 10 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate					
+					updatefunction "syncinputtrajectory"
+				}
+				
+				inputport port_current_pose from current_pose estimated_freq 20 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "synccurrentpose"
+					syncstate pubsubstate
+				}
+				
+				inputport port_current_velocity from current_velocity estimated_freq 20 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "synccurrentvelocity"
+					syncstate pubsubstate
+				}
+				
+				inputport port_replan_request_sig from replan_request_sig estimated_freq 1 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "replanrequestsig"
+				}
+				inputport port_detected_obstacles from "rei_perception_monitor/detected_obstacles" estimated_freq 1 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "detectedobstacles"
+				}
+				inputport port_closest_waypoint from closest_waypoint estimated_freq 10 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "closestwaypoint"
+					syncstate pubsubstate
+				} 
+			}
+			outputs
+			{
+				outputport port_refined_trajectory to refined_trajectory estimated_freq 10
+				{
+					continuousstate pubsubstate
+				}
+				outputport port_calc_planner_time to calc_planner_time estimated_freq 10
+				{
+					debug true
+					continuousstate pubsubstate
+				}
+			}
+		}
+		
+		
+	}	
+}

@@ -1,0 +1,87 @@
+network mobilerobot
+{
+	networktype ROS2
+	topic_msgs
+	{
+		messagetype std_msgs/Int32
+		messagetype std_msgs/Float64
+		messagetype std_msgs/String
+		messagetype fiekrobot_control_msgs/DiffRobotMsg
+		messagetype fiekrobot_control_msgs/DiffRobotFeedback
+		messagetype sensor_msgs/Image		
+		messagetype rei_perception_msgs/DetectedObjects
+	}
+	topics
+	{
+		topic "cmd_diff_robot": DiffRobotMsg;
+		topic "feedback_diff_robot": DiffRobotFeedback;
+		// Hexa camera driver
+		topic "camera_hexa_0": Image;
+		topic "camera_hexa_1": Image;
+		topic "camera_hexa_2": Image;
+		topic "camera_hexa_3": Image;
+		topic "camera_hexa_4": Image;
+		topic "camera_hexa_5": Image;
+		topic "stereo_left": Image;
+		topic "detected_objects": String;
+	}
+	nodes
+	{
+		node robotdiff_drive_controller_node in robotdiff_drive_controller
+		{
+			language Cpp
+			continuousstate
+			{
+				continuousstate drive_state;
+			}
+			inputs
+			{
+				inputport port_cmd_diff_robot from cmd_diff_robot estimated_freq 10
+				{
+					continuousstate drive_state
+				}
+			}
+			outputs
+			{
+				outputport port_cmd_feedback to feedback_diff_robot estimated_freq 10
+				{
+					continuousstate drive_state
+				}				
+			}
+		}
+		node camera_hexa_driver_node in camera_hexa_driver
+		{
+			language Cpp
+			continuousstate
+			{
+				continuousstate hexa_driver_state;
+			}
+			outputs
+			{
+				outputport port_hexa_0 to camera_hexa_0 estimated_freq 30 { continuousstate hexa_driver_state }
+				outputport port_hexa_1 to camera_hexa_1 estimated_freq 30 { continuousstate hexa_driver_state }
+				outputport port_hexa_2 to camera_hexa_2 estimated_freq 30 { continuousstate hexa_driver_state }
+				outputport port_hexa_3 to camera_hexa_3 estimated_freq 30 { continuousstate hexa_driver_state }
+				outputport port_hexa_4 to camera_hexa_4 estimated_freq 30 { continuousstate hexa_driver_state }
+				outputport port_hexa_5 to camera_hexa_5 estimated_freq 30 { continuousstate hexa_driver_state }
+			}
+		}
+		node cameradetector in roboperception
+		{
+			language Python
+			continuousstate
+			{
+				continuousstate camera_state;
+			}
+			inputs
+			{
+				inputport image_process from stereo_left estimated_freq 30 { continuousstate camera_state syncfunction camera_update } 
+			}
+			outputs
+			{
+				outputport bounding_boxes to detected_objects estimated_freq 30 { continuousstate camera_state }
+			}
+		}
+		
+	}	
+}

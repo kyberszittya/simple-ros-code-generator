@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rosnetworkmodel:MsgDefinitions
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rosnetworkmodel="http://jkk.sze.hu/rosnetworkmodel"
+    xsi:schemaLocation="http://jkk.sze.hu/rosnetworkmodel ../../hu.sze.aut.ros.network.model/model/rosnetworkmodel.ecore">
+  <package name="geometry_msgs">
+    <rosmsg
+        name="PoseStamped"/>
+    <rosmsg
+        name="TwistStamped"/>
+  </package>
+  <package name="std_msgs">
+    <rosmsg
+        name="Int32"
+        stamped="false"/>
+  </package>
+  <package name="autoware_msgs">
+    <rosmsg
+        name="Lane"/>
+    <rosmsg
+        name="TrafficLaneArray"/>
+  </package>
+  <package name="rei_planner_signals">
+    <rosmsg
+        name="ReplanRequest"/>
+    <rosmsg
+        name="NoObstacleDetected"/>
+  </package>
+  <package name="rei_monitoring_msgs">
+    <rosmsg
+        name="StateMachineTransitionSignal"/>
+    <rosmsg
+        name="StateMachineStateUpdate"/>
+  </package>
+  <package name="visualization_msgs">
+    <rosmsg
+        name="MarkerArray"/>
+  </package>
+  <package name="grid_map_msgs">
+    <rosmsg
+        name="GridMap"/>
+  </package>
+</rosnetworkmodel:MsgDefinitions>
