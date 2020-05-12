@@ -30,11 +30,13 @@ class GenerateYamlConfiguration {
 	
 	def static CharSequence generateDynCfgCallbackUpdate(AbstractNodeParameter param)'''
 	«IF param instanceof NodeParameter»
+	«IF param.targetvar!==null»
 	if («(param as NodeParameter).targetvar» != config.«(param as NodeParameter).name»)
 	{
 		ROS_INFO_STREAM("Updated message [«param.targetvar»]: «param.name»" << config.«(param as NodeParameter).name»);
 	}
     «(param as NodeParameter).targetvar» = config.«(param as NodeParameter).name»;
+    «ENDIF»
     «ELSEIF param instanceof NodeParameterGroup»
     «FOR p: param.nodeparameter»
     «generateDynCfgCallbackUpdate(p)»
@@ -43,11 +45,18 @@ class GenerateYamlConfiguration {
 	'''
 	
 	def static generateCallbackGenerateDynamicCfgCallback(Node n)'''
+	#include <«n.rospackage»/«n.name.toLowerCase».hpp>
+	
+	namespace «n.namespace»
+	{
+	
 	void «n.name»::callbackReconfigure(«n.rospackage»::«n.name»Config & config,uint32_t level)
 	{
 		«FOR param: n.nodeparameters»
 		«generateDynCfgCallbackUpdate(param)»
 		«ENDFOR»
+	}
+	
 	}
 	'''
 	
@@ -58,7 +67,7 @@ class GenerateYamlConfiguration {
 	«FOR p: n.nodeparameters»
 	«generateDynamicReconfigureParameter(p, "gen")»
 	«ENDFOR»
-	exit(gen.generate(PACKAGE, "«n.name»", "«n.name.toFirstUpper»"))
+	exit(gen.generate("«n.rospackage»", "«n.name»", "«n.name.toFirstUpper»"))
 	'''
 	
 	def static CharSequence generateNodeParameter(AbstractNodeParameter param)'''
