@@ -94,7 +94,7 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 		}
 		network.node.filter[it instanceof Node].forEach[
 			val n = it as Node
-			fsa.generateFile('''«n.rospackage»/yaml/default.yaml''', 
+			fsa.generateFile('''«n.rospackage»/param/default.yaml''', 
 				GenerateYamlConfiguration::generateNodeYamlConfiguration(n)
 			)			
 			fsa.generateFile('''«n.rospackage»/dyncfg/«it.name.toFirstUpper».cfg''',
