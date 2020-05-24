@@ -148,5 +148,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//IntegerParameter/step"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//IntegerParameter/defaultval"/>
     </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//ErrorLocation"/>
   </genPackages>
 </genmodel:GenModel>

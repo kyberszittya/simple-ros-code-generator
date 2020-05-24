@@ -39,6 +39,15 @@ FuzzyHybridSystem returns FuzzyHybridSystem:
 	'}';
 
 Location returns Location:
+	SimpleLocation | ErrorLocation
+;
+
+ErrorLocation returns ErrorLocation:
+	{ErrorLocation}
+	name=EString ':' 'errorlocation'
+;
+
+SimpleLocation returns Location:
 	{Location}	
 	name=EString ':' 'location';
 

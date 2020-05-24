@@ -6,15 +6,15 @@ network mobilerobot
 		messagetype std_msgs/Int32
 		messagetype std_msgs/Float64
 		messagetype std_msgs/String
-		messagetype fiekrobot_control_msgs/DiffRobotMsg
-		messagetype fiekrobot_control_msgs/DiffRobotFeedback
+		messagetype diffrobot_control_msgs/DiffControlCommand
+		messagetype diffrobot_control_msgs/DiffControlFeedback
 		messagetype sensor_msgs/Image		
 		messagetype rei_perception_msgs/DetectedObjects
 	}
 	topics
 	{
-		topic "cmd_diff_robot": DiffRobotMsg;
-		topic "feedback_diff_robot": DiffRobotFeedback;
+		topic "cmd_diff_robot": DiffControlCommand;
+		topic "feedback_diff_robot": DiffControlFeedback;
 		// Hexa camera driver
 		topic "camera_hexa_0": Image;
 		topic "camera_hexa_1": Image;
@@ -27,16 +27,25 @@ network mobilerobot
 	}
 	nodes
 	{
-		node robotdiff_drive_controller_node in robotdiff_drive_controller
+		node robotdiff_drive_controller_node in robotdiff_drive_controller namespace robotdiff
 		{
 			language Cpp
+			parameters
+			{
+				parametergroup robotparameters generate true
+				{
+					double motor_ratio = 10000.0 <500.0, 20000.0> -> "robotconfig.motor_ratio"
+					double wheel_radius = 0.05 <0.02, 0.4> -> "robotconfig.wheelradius"
+					double baselength = 0.4 <0.1, 0.6> -> "robotconfig.baselength"
+				}
+			}
 			continuousstate
 			{
 				continuousstate drive_state;
 			}
 			inputs
 			{
-				inputport port_cmd_diff_robot from cmd_diff_robot estimated_freq 10
+				inputport port_cmd_diff_robot from cmd_diff_robot estimated_freq 10 sample_tolerance 0.1
 				{
 					continuousstate drive_state
 				}
@@ -49,7 +58,7 @@ network mobilerobot
 				}				
 			}
 		}
-		node camera_hexa_driver_node in camera_hexa_driver
+		node camera_hexa_driver_node in camera_hexa_driver namespace robotdiff
 		{
 			language Cpp
 			continuousstate
@@ -66,7 +75,7 @@ network mobilerobot
 				outputport port_hexa_5 to camera_hexa_5 estimated_freq 30 { continuousstate hexa_driver_state }
 			}
 		}
-		node cameradetector in roboperception
+		node cameradetector in roboperception namespace robotdiff
 		{
 			language Python
 			continuousstate
@@ -75,7 +84,7 @@ network mobilerobot
 			}
 			inputs
 			{
-				inputport image_process from stereo_left estimated_freq 30 { continuousstate camera_state syncfunction camera_update } 
+				inputport image_process from stereo_left estimated_freq 30 sample_tolerance 0.1{ continuousstate camera_state updatefunction camera_update } 
 			}
 			outputs
 			{

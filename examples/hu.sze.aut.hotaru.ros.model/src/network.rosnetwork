@@ -31,6 +31,68 @@ network hotaru
 		node HotaruTebLocalPlannerNode in hotaru_planner_node_teb namespace hotaru
 		{
 			language Cpp
+			/*
+			parameters
+			{
+				bool "debug" = true
+				bool "bypass_behavior" = false
+				parametergroup planner_setup generate true
+				{
+					double via_points_speed_linear_ratio = 1.5 <1.0, 2.0> -> "planner_config.via_points_speed_linear_ratio"
+				}
+				parametergroup robot
+				{
+					double wheelbase = 2.7 <2.7,2.7> -> "tebconfig.robot.wheelbase"					
+					double max_vel_x = 10.0 <0.4, 50.0> -> "tebconfig.robot.max_vel_x"
+					double max_vel_y = 0.0 <0.0,0.0> -> "tebconfig.robot.max_vel_y"
+					//double max_vel_theta = 0.2 <0.0,0.5> -> "tebconfig.robot.max_vel_theta"
+					double max_vel_x_backwards = 0.01 <0.01, 0.001> -> "tebconfig.robot.max_vel_x_backwards"
+					double acc_lim_theta = 0.05 <0.05, 0.05> -> "tebconfig.robot.acc_lim_theta"
+					double acc_lim_x = 0.2 <0.2, 0.3> -> "tebconfig.robot.acc_lim_x"
+					//double acc_lim_y = 0.0 <0.0, 1.0> -> "tebconfig.robot.acc_lim_y"
+					double min_turning_radius = 10.4 <10.4,10.4> -> "tebconfig.robot.min_turning_radius"
+					bool cmd_angle_instead_rotvel = true -> "tebconfig.robot.cmd_angle_instead_rotvel"
+				}
+				parametergroup teb_setup
+				{
+					bool homotopy_enabled = false -> "tebconfig.hcp.enable_homotopy_class_planning"
+				}
+				parametergroup teb_trajectory
+				{
+					double dt_ref = 1.0 <0.7,2.0> -> "tebconfig.trajectory.dt_ref"
+					double dt_hysteresis = 0.1 <0.05, 0.2> -> "tebconfig.trajectory.dt_hysteresis"
+					int min_samples = 10 <5, 100> -> "tebconfig.trajectory.min_samples"
+					int max_samples = 500 <10, 600> -> "tebconfig.trajectory.min_samples"
+					bool exact_arc_length = false -> "tebconfig.trajectory.exact_arc_length"
+					double min_obstacle_distance = 0.5 <0.4,1.0> -> "tebconfig.obstacles.min_obstacle_dist"
+					double inflation_distance = 0.6 <0.5, 1.1> -> "tebconfig.obstacles.inflation_dist"
+					double xy_goal_tolerance = 0.4 <0.1, 0.5> -> "tebconfig.goal_tolerance.xy_goal_tolerance"
+					double yaw_goal_tolerance = 0.2 <0.1, 0.5> -> "tebconfig.goal_tolerance.yaw_goal_tolerance"					
+				}
+				parametergroup teb_weights
+				{
+					int no_inner_iterations = 4 <1, 20> -> "tebconfig.optim.no_inner_iterations"
+					int no_outer_iterations = 5 <1, 20> -> "tebconfig.optim.no_outer_iterations"
+					double penalty_epsilon = 0.1 <0.01, 1.0> -> "tebconfig.optim.penalty_epsilon"
+					double weight_obstacle = 40.0 <5.0, 100.0> -> "tebconfig.optim.weight_obstacle"
+					double weight_inflation = 20.0 <5.0, 100.0> -> "tebconfig.optim.weight_inflation"
+					double weight_viapoints = 4.0 <1.0, 20.0> -> "tebconfig.optim.weight_viapoint"
+					double weight_optimaltime = 1.0 <1.0, 5.0> -> "tebconfig.optim.weight_optimaltime"
+					double weight_shortest_path = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_shortest_path"
+					double weight_acc_lim_x = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_acc_lim_x"
+					double weight_acc_lim_y = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_acc_lim_y"
+					double weight_acc_lim_theta = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_acc_lim_theta"
+					double weight_max_vel_x = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_max_vel_x"
+					double weight_max_vel_y = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_max_vel_y"
+					double weight_max_vel_theta = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_max_vel_theta"
+					double weight_kinematics_turning_radius = 10.0 <2.0, 20.0> -> "tebconfig.optim.weight_kinematics_turning_radius"
+					double weight_kinematics_forward_drive = 5.0 <2.0, 30.0> -> "tebconfig.optim.weight_kinematics_forward_drive"
+					double weight_kinematics_nh = 1000.0 <100.0, 1100.0>	-> "tebconfig.optim.weight_kinematics_nh"
+					double weight_adapt_factor = 2.0 <0.0, 60.0> -> "tebconfig.optim.weight_adapt_factor"
+					double obstacle_cost_exponent = 1.0 <0.0, 60.0> -> "tebconfig.optim.obstacle_cost_exponent"
+				}
+			}
+			*/	
 			parameters
 			{
 				bool "debug" = true
@@ -56,11 +118,11 @@ network hotaru
 				parametergroup teb_trajectory
 				{
 					double dt_ref = 1.0 <0.7,2.0> -> "tebconfig.trajectory.dt_ref"
-					double dt_hysteresis = 0.1 <0.05, 0.2> -> "tebconfig.trajectory.dt_hysteresis"
-					double min_obstacle_distance = 0.5 <0.4,1.0> -> "tebconfig.obstacles.min_obstacle_dist"
+					double dt_hysteresis = 0.1 <0.01, 0.5> -> "tebconfig.trajectory.dt_hysteresis"
+					double min_obstacle_distance = 0.5 <0.2,1.0> -> "tebconfig.obstacles.min_obstacle_dist"
 					double inflation_distance = 0.6 <0.5, 1.1> -> "tebconfig.obstacles.inflation_dist"
-					double xy_goal_tolerance = 0.4 <0.1, 0.5> -> "tebconfig.goal_tolerance.xy_goal_tolerance"
-					double yaw_goal_tolerance = 0.2 <0.1, 0.5> -> "tebconfig.goal_tolerance.yaw_goal_tolerance"
+					double xy_goal_tolerance = 0.4 <0.01, 0.5> -> "tebconfig.goal_tolerance.xy_goal_tolerance"
+					double yaw_goal_tolerance = 0.2 <0.01, 0.5> -> "tebconfig.goal_tolerance.yaw_goal_tolerance"
 				}
 				parametergroup teb_weights
 				{
@@ -73,7 +135,7 @@ network hotaru
 					double weight_kinematics_nh = 1000.0 <100.0, 1100.0>	-> "tebconfig.optim.weight_kinematics_nh"
 					double weight_max_vel_y = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_max_vel_y"
 				}
-			}	
+			}
 		}
 		
 		node AbstractHotaruPlannerNode in hotaru_node_elements namespace hotaru

@@ -15,6 +15,8 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.MiddlewareNetwor
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.NetworkType
 import hu.sze.aut.code.generator.ros.RosCodeTemplates
 import hu.sze.aut.code.generator.ros.GenerateYamlConfiguration
+import static guru.nidi.graphviz.attribute.Records.*;
+import static guru.nidi.graphviz.model.Compass.*;
 
 /**
  * Generates code from your model files on save.
@@ -22,6 +24,17 @@ import hu.sze.aut.code.generator.ros.GenerateYamlConfiguration
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class RosNetworkDslGenerator extends AbstractGenerator {
+	
+	def static generateGraphViewOfNode(Node n)
+	{
+		val Graph g = graph("example1").directed()
+        .graphAttr().with(Rank.dir(LEFT_TO_RIGHT))
+        .with(
+                node("a").with(Color.RED).link(node("b")),
+                node("b").link(to(node("c")).with(Style.DASHED))
+        );
+		Graphviz.fromGraph(g).height(100).render(Format.PNG).toFile(new File("example/ex1.png"));
+	}
 	
 	def static void generateRos2Program(IFileSystemAccess2 fsa, Node n)
 	{
@@ -101,6 +114,11 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 				GenerateYamlConfiguration::generateDynamicReconfigureFromParameters(it)
 			)
 			
+		]
+		// Generate graph
+		network.node.filter[it instanceof Node].forEach[
+			// TODO: Not working yet
+			//RosNetworkDslGenerator::generateGraphViewOfNode(it)
 		]		
 	
 //		fsa.generateFile('greetings.txt', 'People to greet: ' + 

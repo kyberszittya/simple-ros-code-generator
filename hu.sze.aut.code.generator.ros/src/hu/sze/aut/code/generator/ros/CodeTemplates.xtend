@@ -10,7 +10,7 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TopicMessage
 
 class RosCodeTemplates {
 	def static classNameInterfaceRos(Node node)'''InterfaceRos_«node.name.toFirstUpper.replace('_','')»'''
-	def static headerFileName(Node node)'''interfaceros_«node.name.toLowerCase».h'''
+	def static headerFileName(Node node)'''gen_«node.name.toLowerCase».hpp'''
 	def static convertMsgDefToCppNamespace(String type){
 		return type.replace('/', "::")
 	}
@@ -18,7 +18,7 @@ class RosCodeTemplates {
 	def static getMsgInclude(TopicMessage msg)'''#include <«msg.prefix»/«msg.name».h>'''
 	def static getMsgNamespace(TopicMessage msg)'''«msg.prefix»::«msg.name»'''
 	
-	
+	def static genPublisherFunctionName(OutputPort port)'''publish«port.topic.name.toFirstUpper.replaceAll('/','_')»'''
 	
 	def static generateRosInterfaceHeader(Node node)'''
 		#ifndef «node.name.toUpperCase»_HEADER_HPP
@@ -27,7 +27,7 @@ class RosCodeTemplates {
 		#include <ros/ros.h>
 		/// ROS msgs
 		«FOR m: CodeGenerationUtils::selectAllMessages(node)»
-		«getMsgInclude(m)»		
+		«getMsgInclude(m)»
 		«ENDFOR»
 		«IF node.continousstate.size > 0»
 		#include <rei_statemachine_library/ros/ros_sync_state_machine.hpp>
@@ -107,7 +107,7 @@ class RosCodeTemplates {
 			/**
 			 * Publish method to publish message to «port.topic.name»
 			 */
-			void publish«port.topic.name.toFirstUpper»();
+			void «genPublisherFunctionName(port)»();
 			«ENDFOR»
 		};
 		
@@ -119,7 +119,7 @@ class RosCodeTemplates {
 		'''
 		
 	def static generateInterfaceRosSource(Node node)'''
-		#include <«node.rospackage»/gen_«headerFileName(node)»>
+		#include <«node.rospackage»/«headerFileName(node)»>
 		
 		«IF node.namespace!==null»
 		namespace «node.namespace» {
@@ -217,7 +217,7 @@ class RosCodeTemplates {
 		«ENDFOR»
 		
 		«FOR port: node.outputport»
-		void «classNameInterfaceRos(node)»::publish«port.topic.name.toFirstUpper»()
+		void «classNameInterfaceRos(node)»::«genPublisherFunctionName(port)»()
 		{
 			«port.id».publish(pubsubstate->msg_«port.id»);
 		}
