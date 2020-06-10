@@ -20,7 +20,7 @@ class RosCodeTemplates {
 	
 	def static genPublisherFunctionName(OutputPort port)'''publish«port.topic.name.toFirstUpper.replaceAll('/','_')»'''
 	
-	def static generateRosInterfaceHeader(Node node)'''
+	def static generateRosInterfaceHeader(Node node, boolean synch)'''
 		#ifndef «node.name.toUpperCase»_HEADER_HPP
 		#define «node.name.toUpperCase»_HEADER_HPP
 		
@@ -29,7 +29,7 @@ class RosCodeTemplates {
 		«FOR m: CodeGenerationUtils::selectAllMessages(node)»
 		«getMsgInclude(m)»
 		«ENDFOR»
-		«IF node.continousstate.size > 0»
+		«IF node.continousstate.size > 0 && synch»
 		#include <rei_statemachine_library/ros/ros_sync_state_machine.hpp>
 		«ENDIF»
 		// State-machine node element
@@ -59,7 +59,7 @@ class RosCodeTemplates {
 		};
 		
 		«CodeGenerationUtils::commentNodeHeader(node)»
-		class «classNameInterfaceRos(node)»: public rei::Interface_SimpleRosNode
+		class «classNameInterfaceRos(node)»: public «IF node.implements==null»rei::Interface_SimpleRosNode«ELSE»«node.implements.namespace»::«classNameInterfaceRos(node.implements)»«ENDIF»
 		{
 		private:
 		protected:
@@ -77,15 +77,19 @@ class RosCodeTemplates {
 			std::unique_ptr<State«node.name.toFirstUpper.replace('_', '')»> pubsubstate;
 			// State machines
 			«FOR state: node.continousstate»
+			«IF synch»
 			std::shared_ptr<rei::RosSyncStateMachine> sync_sm_«state.name.toLowerCase»;
 			std::shared_ptr<rei::SyncStateMachine> sync_state_machine;
 			std::shared_ptr<rei::PortStateMonitorRos> port_state_monitor;
 			std::shared_ptr<rei::RosCommunicationGraphNotifier> notifier;
 			std::shared_ptr<rei::RosSyncStateGuard> sync_guard;
 			std::mutex sm_mutex;
+			«ENDIF»
 			«ENDFOR»
+			«IF synch»
 			// Set ALL STATES CB
 			virtual void setSyncStateMachineCallbacks() = 0;
+			«ENDIF»
 		public:
 			«classNameInterfaceRos(node)»(std::shared_ptr<ros::NodeHandle> private_nh, std::shared_ptr<ros::NodeHandle> nh): private_nh(private_nh), nh(nh) {}
 			
@@ -118,7 +122,7 @@ class RosCodeTemplates {
 		#endif
 		'''
 		
-	def static generateInterfaceRosSource(Node node)'''
+	def static generateInterfaceRosSource(Node node, boolean synch)'''
 		#include <«node.rospackage»/«headerFileName(node)»>
 		
 		«IF node.namespace!==null»
@@ -129,6 +133,7 @@ class RosCodeTemplates {
 		
 		bool «classNameInterfaceRos(node)»::initTimeoutStateMachine()
 		{
+			«IF synch»
 			// Initialize state machines 
 			notifier = std::make_shared<rei::RosCommunicationGraphNotifier>("«node.name.toLowerCase»/sync_state/", nh);
 			notifier->initialize();
@@ -136,7 +141,9 @@ class RosCodeTemplates {
 			sync_guard = std::make_shared<rei::RosSyncStateGuard>();
 			sync_guard->setMonitor(port_state_monitor);
 			sync_state_machine = std::make_shared<rei::SyncStateMachine>(notifier, sync_guard);
+			«ENDIF»
 			// Sync state machine initialization
+			«IF synch»
 			«FOR state: node.continousstate»
 			sync_sm_«state.name.toLowerCase» = std::make_shared<rei::RosSyncStateMachine>(nh,
 				sync_state_machine, port_state_monitor, notifier, 
@@ -157,11 +164,16 @@ class RosCodeTemplates {
 				return false;
 			}
 			«ENDFOR»
+			«ENDIF»
 			return true;
 		}
 		
 		bool «classNameInterfaceRos(node)»::initMiddleware(const bool debug, const bool bypass_behavior)
 		{
+			«IF node.implements!=null»
+			/// Call superinterface
+			«classNameInterfaceRos(node)»::initMiddleware(debug, bypass_behavior);
+			«ENDIF»
 			/// Initialize internal pubsub state
 			pubsubstate = std::unique_ptr<State«node.name.toFirstUpper.replace('_', '')»>(new State«node.name.toFirstUpper.replace('_', '')»(debug, bypass_behavior));
 			if (pubsubstate==nullptr)

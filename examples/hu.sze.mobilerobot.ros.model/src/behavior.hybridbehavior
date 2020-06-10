@@ -1,6 +1,30 @@
 hybridsystem motor_driver
 {
-	locations {
-		
+	
+	locations 
+	{
+		FORWARD: location,
+		REVERSE: location,
+		STOPPED: location,
+		ERROR: location
 	}
+	transitions
+	{
+		transition tr_forwardstop source FORWARD -> target STOPPED
+		{
+			
+		}, 
+		transition tr_reversestop source REVERSE -> target STOPPED
+		{
+			
+		},
+		transition tr_stoppedreverse source STOPPED -> target REVERSE
+		{
+			
+		},
+		transition tr_stoppedforward source STOPPED -> target FORWARD
+		{
+			
+		}
+	}	
 }

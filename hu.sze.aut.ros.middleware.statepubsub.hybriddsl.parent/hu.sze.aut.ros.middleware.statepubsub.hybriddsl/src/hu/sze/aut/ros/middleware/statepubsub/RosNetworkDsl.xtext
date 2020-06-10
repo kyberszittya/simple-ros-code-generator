@@ -76,7 +76,7 @@ AbstractNodeParameter returns AbstractNodeParameter:
 
 Node returns Node:
 	{Node}
-	'node' name=EString 'in' rospackage=EString "namespace" namespace=EString
+	'node' name=EString 'in' rospackage=EString "namespace" namespace=EString ("implements" implements=[Node|EString])?
 	'{'
 		"language" language=LanguageType
 		('parameters'

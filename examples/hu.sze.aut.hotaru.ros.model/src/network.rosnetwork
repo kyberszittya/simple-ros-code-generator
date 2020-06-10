@@ -13,7 +13,10 @@ network hotaru
 		// REI msgs
 		messagetype rei_planner_signals/ReplanRequest
 		messagetype rei_perception_msgs/DetectedObjects
-		
+		// Autoware msgs
+		messagetype autoware_msgs/VehicleStatus
+		// Grid map
+		messagetype grid_map_msgs/GridMap
 	}
 	topics
 	{
@@ -25,9 +28,34 @@ network hotaru
 		topic "rei_perception_monitor/detected_obstacles": DetectedObjects;
 		topic "refined_trajectory": RefinedTrajectory;
 		topic "calc_planner_time": Float64;
+		topic "lookahead_point": Int32;
+		topic "vehicle_status": VehicleStatus;
+		topic "dynamic_window": GridMap;
+		topic "optim_boundary": GridMap;
 	}
 	nodes
 	{
+		node DynamicKinematicWindow in rei_perception_nodes namespace rei
+		{
+			language Cpp
+			continuousstate
+			{
+				continuousstate pubsubstate;
+			}
+			inputs
+			{
+				inputport port_vehicle_status from vehicle_status estimated_freq 30 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "updatevehiclestatus"
+				}
+			}
+			outputs
+			{
+				outputport port_grid_map to dynamic_window estimated_freq 30 { continuousstate pubsubstate}
+			}
+		}
+		
 		node HotaruTebLocalPlannerNode in hotaru_planner_node_teb namespace hotaru
 		{
 			language Cpp
@@ -103,12 +131,12 @@ network hotaru
 				}
 				parametergroup robot
 				{
-					double wheelbase = 2.7 <2.7,2.7> -> "tebconfig.robot.wheelbase"
-					double min_turning_radius = 10.4 <10.4,10.4> -> "tebconfig.robot.min_turning_radius"
+					double wheelbase = 2.7 <1.0,4.5> -> "tebconfig.robot.wheelbase"
+					double min_turning_radius = 10.4 <10.0,12.1> -> "tebconfig.robot.min_turning_radius"
 					double max_vel_y = 0.0 <0.0,0.0> -> "tebconfig.robot.max_vel_y"
-					double acc_lim_theta = 0.05 <0.05, 0.05> -> "tebconfig.robot.acc_lim_theta"
-					double acc_lim_x = 0.2 <0.2, 0.3> -> "tebconfig.robot.acc_lim_x"
-					double max_vel_x_backwards = 0.01 <0.01, 0.001> -> "tebconfig.robot.max_vel_x_backwards"
+					double acc_lim_theta = 0.05 <0.005, 1.5> -> "tebconfig.robot.acc_lim_theta"
+					double acc_lim_x = 0.2 <0.1, 5.0> -> "tebconfig.robot.acc_lim_x"
+					double max_vel_x_backwards = 0.01 <3.0, 0.001> -> "tebconfig.robot.max_vel_x_backwards"
 					bool cmd_angle_instead_rotvel = true -> "tebconfig.robot.cmd_angle_instead_rotvel"
 				}
 				parametergroup teb_setup
@@ -117,24 +145,49 @@ network hotaru
 				}
 				parametergroup teb_trajectory
 				{
-					double dt_ref = 1.0 <0.7,2.0> -> "tebconfig.trajectory.dt_ref"
+					double dt_ref = 1.0 <0.2,2.0> -> "tebconfig.trajectory.dt_ref"
 					double dt_hysteresis = 0.1 <0.01, 0.5> -> "tebconfig.trajectory.dt_hysteresis"
-					double min_obstacle_distance = 0.5 <0.2,1.0> -> "tebconfig.obstacles.min_obstacle_dist"
-					double inflation_distance = 0.6 <0.5, 1.1> -> "tebconfig.obstacles.inflation_dist"
+					double min_obstacle_distance = 0.5 <0.2,3.0> -> "tebconfig.obstacles.min_obstacle_dist"
+					double inflation_distance = 0.6 <0.5, 3.1> -> "tebconfig.obstacles.inflation_dist"
 					double xy_goal_tolerance = 0.4 <0.01, 0.5> -> "tebconfig.goal_tolerance.xy_goal_tolerance"
 					double yaw_goal_tolerance = 0.2 <0.01, 0.5> -> "tebconfig.goal_tolerance.yaw_goal_tolerance"
 				}
 				parametergroup teb_weights
 				{
 					double weight_obstacle = 40.0 <5.0, 100.0> -> "tebconfig.optim.weight_obstacle"
-					double weight_viapoints = 4.0 <1.0, 20.0> -> "tebconfig.optim.weight_viapoint"
-					double weight_optimaltime = 1.0 <1.0, 5.0> -> "tebconfig.optim.weight_optimaltime"
-					double weight_shortest_path = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_shortest_path"
+					double weight_viapoints = 4.0 <1.0, 100.0> -> "tebconfig.optim.weight_viapoint"
+					double weight_optimaltime = 1.0 <1.0, 100.0> -> "tebconfig.optim.weight_optimaltime"
+					double weight_shortest_path = 0.0 <0.0, 100.0> -> "tebconfig.optim.weight_shortest_path"
 					double weight_kinematics_turning_radius = 10.0 <2.0, 20.0> -> "tebconfig.optim.weight_kinematics_turning_radius"
 					double weight_kinematics_forward_drive = 5.0 <2.0, 30.0> -> "tebconfig.optim.weight_kinematics_forward_drive"
 					double weight_kinematics_nh = 1000.0 <100.0, 1100.0>	-> "tebconfig.optim.weight_kinematics_nh"
-					double weight_max_vel_y = 0.0 <0.0, 0.0> -> "tebconfig.optim.weight_max_vel_y"
+					double weight_max_vel_x = 0.0 <0.0, 10.0> -> "tebconfig.optim.weight_max_vel_x"
+					double weight_max_vel_y = 0.0 <0.0, 10.0> -> "tebconfig.optim.weight_max_vel_y"
+					double penalty_epsilon = 0.1 <0.01, 10.0> -> "tebconfig.optim.penalty_epsilon"
+					int outer_iterations = 5 <1, 15> -> "tebconfig.optim.no_outer_iterations"
+					int inner_iterations = 4 <1, 15> -> "tebconfig.optim.no_inner_iterations"
 				}
+			}
+		}
+		
+		node DynamicWindowApproachNode in hotaru_dwa namespace hotaru implements "hotaru.AbstractHotaruPlannerNode"
+		{
+			language Cpp
+			continuousstate
+			{
+				continuousstate pubsubstate;
+			}
+			inputs
+			{
+				inputport port_input_dynamic_window from dynamic_window estimated_freq 10 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+				}
+			}
+			outputs
+			{
+				outputport port_output_dwa_optim to optim_boundary estimated_freq 10{ continuousstate pubsubstate }
+				
 			}
 		}
 		
@@ -193,6 +246,10 @@ network hotaru
 				outputport port_calc_planner_time to calc_planner_time estimated_freq 10
 				{
 					debug true
+					continuousstate pubsubstate
+				}
+				outputport port_lookahead_point to lookahead_point estimated_freq 10
+				{
 					continuousstate pubsubstate
 				}
 			}

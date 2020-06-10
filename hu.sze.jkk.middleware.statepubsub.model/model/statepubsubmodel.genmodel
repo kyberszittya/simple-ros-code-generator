@@ -25,6 +25,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/topic"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/topicmessage"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//MiddlewareNetwork/networktype"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/service"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/servicetype"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//InputPort">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/node"/>
@@ -149,5 +151,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//IntegerParameter/defaultval"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//ErrorLocation"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//Service">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Service/prefix"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Service/name"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//ServiceType"/>
   </genPackages>
 </genmodel:GenModel>

@@ -17,6 +17,9 @@ import hu.sze.aut.code.generator.ros.RosCodeTemplates
 import hu.sze.aut.code.generator.ros.GenerateYamlConfiguration
 import static guru.nidi.graphviz.attribute.Records.*;
 import static guru.nidi.graphviz.model.Compass.*;
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.InputPort
+import java.util.Set
+import java.util.HashSet
 
 /**
  * Generates code from your model files on save.
@@ -52,6 +55,19 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 		}
 	}
 	
+	def static Set<InputPort> getSyncInputPorts(Node n)
+	{
+		val Set<InputPort> ports = new HashSet(); 
+		for (p: n.inputport)
+		{
+			if (p.synchronizesState !== null)
+			{
+				ports.add(p)
+			}
+		}
+		return ports;
+	}
+	
 	def static void generateRosProgram(IFileSystemAccess2 fsa, Node n)
 	{
 		switch (n.language)
@@ -70,9 +86,9 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 					fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/default_config_«n.name.toLowerCase».hpp''', GenerateYamlConfiguration::generateDefaultParameterValueHeader(n))
 					fsa.generateFile('''«n.rospackage»/src/gen_config_«n.name.toLowerCase».cpp''', GenerateYamlConfiguration::generateYamlConfigReaderRos(n))
 				}
-				
-				fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/gen_«n.name.toLowerCase».hpp''', RosCodeTemplates::generateRosInterfaceHeader(n))
-				fsa.generateFile('''«n.rospackage»/src/gen_«n.name.toLowerCase».cpp''', RosCodeTemplates::generateInterfaceRosSource(n))
+				val ps = getSyncInputPorts(n)
+				fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/gen_«n.name.toLowerCase».hpp''', RosCodeTemplates::generateRosInterfaceHeader(n, ps.size > 0))
+				fsa.generateFile('''«n.rospackage»/src/gen_«n.name.toLowerCase».cpp''', RosCodeTemplates::generateInterfaceRosSource(n, ps.size > 0))
 			}
 		}
 	}
