@@ -22,23 +22,21 @@
     <genClasses ecoreClass="statepubsubmodel.ecore#//MiddlewareNetwork">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//MiddlewareNetwork/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/node"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/topic"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/topicmessage"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/channels"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//MiddlewareNetwork/networktype"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/service"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/servicetype"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//MiddlewareNetwork/msgs"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//InputPort">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/node"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/continousState"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//InputPort/sync_function_name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/synchronizesState"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/topic"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/channel"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//OutputPort">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//OutputPort/node"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//OutputPort/continousState"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//OutputPort/topic"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//OutputPort/channel"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//Port">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Port/id"/>
@@ -59,14 +57,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Node/language"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Node/nodeparameters"/>
     </genClasses>
-    <genClasses ecoreClass="statepubsubmodel.ecore#//TopicMessage">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//TopicMessage/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//TopicMessage/prefix"/>
-    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//TopicMessage"/>
     <genClasses ecoreClass="statepubsubmodel.ecore#//Topic">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Topic/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Topic/portFrom"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Topic/name"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//ContinousState">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//ContinousState/producesTo"/>
@@ -151,10 +144,17 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//IntegerParameter/defaultval"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//ErrorLocation"/>
-    <genClasses ecoreClass="statepubsubmodel.ecore#//Service">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Service/prefix"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Service/name"/>
-    </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//ServiceType"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//AbstractMsgType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//AbstractMsgType/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//AbstractMsgType/prefix"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//Channel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Channel/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Channel/portFrom"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//Service">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Service/type"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -6,15 +6,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="node" upperBound="-1" eType="#//Node"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="topic" upperBound="-1"
-        eType="#//Topic" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="topicmessage" upperBound="-1"
-        eType="#//TopicMessage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channels" upperBound="-1"
+        eType="#//Channel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="networktype" eType="#//NetworkType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="service" upperBound="-1"
-        eType="#//Service" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="servicetype" upperBound="-1"
-        eType="#//ServiceType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="msgs" upperBound="-1" eType="#//AbstractMsgType"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="node" lowerBound="1" eType="#//Node"
@@ -24,15 +20,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sync_function_name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="synchronizesState" eType="#//ContinousState"
         eOpposite="#//ContinousState/synchronizeWith"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="topic" eType="#//Topic"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//Channel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="node" lowerBound="1" eType="#//Node"
         eOpposite="#//Node/outputport"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="continousState" eType="#//ContinousState"
         eOpposite="#//ContinousState/producesTo"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="topic" eType="#//Topic"
-        eOpposite="#//Topic/portFrom"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//Channel"
+        eOpposite="#//Channel/portFrom"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -59,15 +55,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodeparameters" upperBound="-1"
         eType="#//AbstractNodeParameter" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TopicMessage">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Topic" eSuperTypes="#//DescriptiveElement">
+  <eClassifiers xsi:type="ecore:EClass" name="TopicMessage" eSuperTypes="#//AbstractMsgType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Topic" eSuperTypes="#//Channel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//TopicMessage"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="portFrom" eType="#//OutputPort"
-        eOpposite="#//OutputPort/topic"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ContinousState">
     <eStructuralFeatures xsi:type="ecore:EReference" name="producesTo" upperBound="-1"
@@ -172,9 +162,17 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorLocation" eSuperTypes="#//Location"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Service">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceType" eSuperTypes="#//AbstractMsgType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractMsgType">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ServiceType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Channel" abstract="true" eSuperTypes="#//DescriptiveElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portFrom" eType="#//OutputPort"
+        eOpposite="#//OutputPort/channel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//Channel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//ServiceType"/>
+  </eClassifiers>
 </ecore:EPackage>

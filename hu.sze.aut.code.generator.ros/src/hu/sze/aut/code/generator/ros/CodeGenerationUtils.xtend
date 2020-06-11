@@ -4,6 +4,7 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Node
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TopicMessage
 import java.util.HashSet
 import java.util.Set
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Topic
 
 class CodeGenerationUtils {
 	def static selectAllMessages(Node node)
@@ -11,11 +12,11 @@ class CodeGenerationUtils {
 		val Set<TopicMessage> messages = new HashSet
 		for (port: node.inputport)
 		{
-			messages.add(port.topic.type)
+			messages.add((port.channel as Topic).type)
 		}
 		for (port: node.outputport)
 		{
-			messages.add(port.topic.type)
+			messages.add((port.channel as Topic).type)
 		}
 		return messages
 	}
@@ -24,10 +25,10 @@ class CodeGenerationUtils {
 	/**
 	 *
 	 «FOR port: node.inputport»
-	 * @attribute «port.id»: subscribes to topic «port.topic.name» 
+	 * @attribute «port.id»: subscribes to topic «(port.channel as Topic).name» 
 	 «ENDFOR»
 	 «FOR port: node.outputport»
-	 * @attribute «port.id»: publishes to topic «port.topic.name»
+	 * @attribute «port.id»: publishes to topic «(port.channel as Topic).name»
 	 «ENDFOR»
 	 */
 	'''

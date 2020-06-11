@@ -7,6 +7,7 @@ import java.util.List
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.OutputPort
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.InputPort
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TopicMessage
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Service
 
 class RosCodeTemplates {
 	def static classNameInterfaceRos(Node node)'''InterfaceRos_«node.name.toFirstUpper.replace('_','')»'''
@@ -18,7 +19,7 @@ class RosCodeTemplates {
 	def static getMsgInclude(TopicMessage msg)'''#include <«msg.prefix»/«msg.name».h>'''
 	def static getMsgNamespace(TopicMessage msg)'''«msg.prefix»::«msg.name»'''
 	
-	def static genPublisherFunctionName(OutputPort port)'''publish«port.topic.name.toFirstUpper.replaceAll('/','_')»'''
+	def static genPublisherFunctionName(OutputPort port)'''publish«(port.channel as Topic).name.toFirstUpper.replaceAll('/','_')»'''
 	
 	def static generateRosInterfaceHeader(Node node, boolean synch)'''
 		#ifndef «node.name.toUpperCase»_HEADER_HPP
@@ -48,11 +49,15 @@ class RosCodeTemplates {
 			const bool bypass_behavior;     ///< Bypass behavioral state machines
 			// ROS input messages
 			«FOR port: node.inputport»
-			«getMsgNamespace(port.topic.type)» msg_«port.id.toFirstLower»; ///< «port.id» store to «getMsgNamespace(port.topic.type)»
+			«IF port.channel instanceof Topic»
+			«getMsgNamespace((port.channel as Topic).type)» msg_«port.id.toFirstLower»; ///< «port.id» store to «getMsgNamespace((port.channel as Topic).type)»
+			«ELSEIF port.channel instanceof Service»
+			// TODO
+			«ENDIF»
 			«ENDFOR»
 			/// ROS output messages
 			«FOR port: node.outputport»
-			«getMsgNamespace(port.topic.type)» msg_«port.id.toFirstLower»; ///< «port.id» store to «getMsgNamespace(port.topic.type)»
+			«getMsgNamespace((port.channel as Topic).type)» msg_«port.id.toFirstLower»; ///< «port.id» store to «getMsgNamespace((port.channel as Topic).type)»
 			«ENDFOR»
 			
 			State«node.name.toFirstUpper.replace('_', '')»(const bool debug, const bool bypass_behavior): debug(debug), bypass_behavior(bypass_behavior) {}
@@ -68,11 +73,11 @@ class RosCodeTemplates {
 			std::shared_ptr<ros::NodeHandle> nh;
 			/// ROS Subscribers
 			«FOR port: node.inputport»
-			ros::Subscriber «port.id.toFirstLower»; ///< «port.id» subscriber to «getMsgNamespace(port.topic.type)»
+			ros::Subscriber «port.id.toFirstLower»; ///< «port.id» subscriber to «getMsgNamespace((port.channel as Topic).type)»
 			«ENDFOR»
 			/// ROS Publishers
 			«FOR port: node.outputport»
-			ros::Publisher «port.id.toFirstLower»; ///< «port.id» publisher to «getMsgNamespace(port.topic.type)»
+			ros::Publisher «port.id.toFirstLower»; ///< «port.id» publisher to «getMsgNamespace((port.channel as Topic).type)»
 			«ENDFOR»
 			std::unique_ptr<State«node.name.toFirstUpper.replace('_', '')»> pubsubstate;
 			// State machines
@@ -99,17 +104,17 @@ class RosCodeTemplates {
 			
 			«FOR port: node.inputport»
 			/**
-			 * Callback method for «port.topic.name»
+			 * Callback method for «(port.channel as Topic).name»
 			 */
-			void cb«port.id.toFirstUpper»(const «getMsgNamespace(port.topic.type)»::ConstPtr& msg); ///< «port.id» subscriber to «getMsgNamespace(port.topic.type)»
+			void cb«port.id.toFirstUpper»(const «getMsgNamespace((port.channel as Topic).type)»::ConstPtr& msg); ///< «port.id» subscriber to «getMsgNamespace((port.channel as Topic).type)»
 			«IF port.sync_function_name!==null»
-			virtual void execute«port.sync_function_name.toFirstUpper»(const «getMsgNamespace(port.topic.type)»::ConstPtr& msg) = 0;
+			virtual void execute«port.sync_function_name.toFirstUpper»(const «getMsgNamespace((port.channel as Topic).type)»::ConstPtr& msg) = 0;
 			«ENDIF»
 			«ENDFOR»
 			
 			«FOR port: node.outputport»
 			/**
-			 * Publish method to publish message to «port.topic.name»
+			 * Publish method to publish message to «(port.channel as Topic).name»
 			 */
 			void «genPublisherFunctionName(port)»();
 			«ENDFOR»
@@ -155,8 +160,8 @@ class RosCodeTemplates {
 					return false;
 				}
 				«FOR portstate: state.synchronizeWith»
-				sync_sm_«state.name.toLowerCase»->addTopicGuard("/«portstate.topic.name»", «1.0/(portstate.estimated_freq as double)»+«portstate.sample_tolerance»);
-				ROS_INFO("Synchronize with topic: «portstate.topic.name», with estimated freq «portstate.estimated_freq» Hz");
+				sync_sm_«state.name.toLowerCase»->addTopicGuard("/«(portstate.channel as Topic).name»", «1.0/(portstate.estimated_freq as double)»+«portstate.sample_tolerance»);
+				ROS_INFO("Synchronize with topic: «(portstate.channel as Topic).name», with estimated freq «portstate.estimated_freq» Hz");
 				«ENDFOR»
 			}
 			else
@@ -183,17 +188,17 @@ class RosCodeTemplates {
 			/// Initialize ROS publishers
 			«FOR port: node.outputport»
 			«IF port.debug»
-			if (pubsubstate->debug) «port.id.toFirstLower» = nh->advertise<«getMsgNamespace(port.topic.type)»>("/debug/«node.name.toLowerCase»/«port.topic.name»", 10);
+			if (pubsubstate->debug) «port.id.toFirstLower» = nh->advertise<«getMsgNamespace((port.channel as Topic).type)»>("/debug/«node.name.toLowerCase»/«(port.channel as Topic).name»", 10);
 			«ELSE»
-			«port.id.toFirstLower» = nh->advertise<«getMsgNamespace(port.topic.type)»>("«port.topic.name»", 10);
+			«port.id.toFirstLower» = nh->advertise<«getMsgNamespace((port.channel as Topic).type)»>("«(port.channel as Topic).name»", 10);
 			«ENDIF»
 			«ENDFOR»
 			/// Initialize ROS subscribers
 			«FOR port: node.inputport»
 			«IF port.debug»
-			if (pubsubstate->debug) «port.id.toFirstLower» = nh->subscribe("/debug/«node.name.toLowerCase»/«port.topic.name»", 10, &«classNameInterfaceRos(node)»::cb«port.id.toFirstUpper», this);
+			if (pubsubstate->debug) «port.id.toFirstLower» = nh->subscribe("/debug/«node.name.toLowerCase»/«(port.channel as Topic).name»", 10, &«classNameInterfaceRos(node)»::cb«port.id.toFirstUpper», this);
 			«ELSE»
-			«port.id.toFirstLower» = nh->subscribe("«port.topic.name»", 10, &«classNameInterfaceRos(node)»::cb«port.id.toFirstUpper», this);
+			«port.id.toFirstLower» = nh->subscribe("«(port.channel as Topic).name»", 10, &«classNameInterfaceRos(node)»::cb«port.id.toFirstUpper», this);
 			«ENDIF»
 			«ENDFOR»
 			return true;
@@ -202,16 +207,16 @@ class RosCodeTemplates {
 		
 		
 		«FOR port: node.inputport»
-		void «classNameInterfaceRos(node)»::cb«port.id.toFirstUpper»(const «getMsgNamespace(port.topic.type)»::ConstPtr& msg)
+		void «classNameInterfaceRos(node)»::cb«port.id.toFirstUpper»(const «getMsgNamespace((port.channel as Topic).type)»::ConstPtr& msg)
 		{
 			pubsubstate->msg_«port.id.toFirstLower» = *msg;
 			«IF port.synchronizesState!==null»
 			// Synchronize with state machine: sync_sm_«port.synchronizesState.name»
 			sm_mutex.lock();
 			«IF port.sync_time_stamp»
-			sync_sm_«port.synchronizesState.name»->stepMessageTopic("/«port.topic.name»", msg->header);
+			sync_sm_«port.synchronizesState.name»->stepMessageTopic("/«(port.channel as Topic).name»", msg->header);
 			«ELSE»
-			sync_sm_«port.synchronizesState.name»->stepMessageTopic("/«port.topic.name»", ros::Time::now());
+			sync_sm_«port.synchronizesState.name»->stepMessageTopic("/«(port.channel as Topic).name»", ros::Time::now());
 			«ENDIF»
 			sm_mutex.unlock();
 			«IF port.sync_function_name!==null»
