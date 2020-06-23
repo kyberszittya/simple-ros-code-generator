@@ -163,7 +163,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorLocation" eSuperTypes="#//Location"/>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceType" eSuperTypes="#//AbstractMsgType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AbstractMsgType">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractMsgType" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

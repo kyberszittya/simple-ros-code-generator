@@ -6,6 +6,7 @@ package hu.sze.aut.ros.middleware.statepubsub.formatting2
 import com.google.inject.Inject
 import hu.sze.aut.ros.middleware.statepubsub.services.RosNetworkDslGrammarAccess
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.MiddlewareNetwork
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.NodeParameterGroup
 import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
 
@@ -15,16 +16,23 @@ class RosNetworkDslFormatter extends AbstractFormatter2 {
 
 	def dispatch void format(MiddlewareNetwork middlewareNetwork, extension IFormattableDocument document) {
 		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
-		for (topicMessage : middlewareNetwork.topicmessage) {
-			topicMessage.format
+		for (abstractMsgType : middlewareNetwork.msgs) {
+			abstractMsgType.format
+		}
+		for (channel : middlewareNetwork.channels) {
+			channel.format
 		}
 		for (node : middlewareNetwork.node) {
 			node.format
 		}
-		for (topic : middlewareNetwork.topic) {
-			topic.format
+	}
+
+	def dispatch void format(NodeParameterGroup nodeParameterGroup, extension IFormattableDocument document) {
+		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		for (nodeParameter : nodeParameterGroup.nodeparameter) {
+			nodeParameter.format
 		}
 	}
 	
-	// TODO: implement for 
+	// TODO: implement for Node
 }

@@ -10,13 +10,13 @@ MiddleWareNetwork returns MiddlewareNetwork:
 		'networktype' networktype=NetworkType		
 		'topic_msgs'
 		'{'
-			topicmessage+=TopicMessage
-			(topicmessage+=TopicMessage)*
+			msgs+=TopicMessage
+			(msgs+=TopicMessage)*
 		'}'
 		'topics'
 		'{'
-			topic+=Topic
-			(topic+=Topic)*
+			channels+=Channel
+			(channels+=Channel)*
 		'}'
 		'nodes' 
 		'{'
@@ -27,6 +27,12 @@ MiddleWareNetwork returns MiddlewareNetwork:
 	'}'
 ;
 
+AbstractMessageType returns AbstractMsgType:
+	TopicMessage | ServiceType
+;
+
+
+
 NetworkType returns NetworkType:
 	'ROS1'|'ROS2'
 ;
@@ -34,6 +40,20 @@ NetworkType returns NetworkType:
 TopicMessage returns TopicMessage:
 	{TopicMessage}
 	'messagetype' prefix=EString'/'name=EString
+;
+
+ServiceType returns ServiceType:
+	{ServiceType}
+	'saervicetype' prefix=EString'/'name=EString
+;
+
+Channel returns Channel:
+	Topic | Service
+;
+
+Service returns Service:
+	{Service}
+	'service' name=EString ':' type=[ServiceType|EString]';'
 ;
 
 Topic returns Topic:
@@ -112,7 +132,7 @@ LanguageType returns LanguageType:
 
 InputPort returns InputPort:
 	{InputPort}
-	'inputport' id=EString 'from' topic=[Topic|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double)? 
+	'inputport' id=EString 'from' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double)? 
 	'{'
 		('debug' debug=EBoolean)?
 		('continuousstate' continousState=[ContinousState|EString])?
@@ -123,7 +143,7 @@ InputPort returns InputPort:
 
 OutputPort returns OutputPort:
 	{OutputPort}
-	'outputport' id=EString 'to' topic=[Topic|EString] ('estimated_freq' estimated_freq=EInt)
+	'outputport' id=EString 'to' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt)
 	'{'
 		('debug' debug=EBoolean)?
 		('continuousstate' continousState=[ContinousState|EString])?
