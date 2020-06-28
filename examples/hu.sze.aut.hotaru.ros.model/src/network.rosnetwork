@@ -17,6 +17,7 @@ network hotaru
 		messagetype autoware_msgs/VehicleStatus
 		// Grid map
 		messagetype grid_map_msgs/GridMap
+		messagetype rei_monitoring_msgs/MotionDynamicConstraints
 	}
 	topics
 	{
@@ -32,6 +33,7 @@ network hotaru
 		topic "vehicle_status": VehicleStatus;
 		topic "dynamic_window": GridMap;
 		topic "optim_boundary": GridMap;
+		topic "motion_dynamic_constraints": MotionDynamicConstraints;
 	}
 	nodes
 	{
@@ -49,10 +51,36 @@ network hotaru
 					continuousstate pubsubstate
 					updatefunction "updatevehiclestatus"
 				}
+				inputport port_motion_dyn_param from motion_dynamic_constraints estimated_freq 10 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "updateconstraints"
+				}
 			}
 			outputs
 			{
 				outputport port_grid_map to dynamic_window estimated_freq 30 { continuousstate pubsubstate}
+			}
+		}
+		
+		node MotionConstraintMonitor in rei_perception_nodes namespace rei
+		{
+			language Cpp
+			continuousstate
+			{
+				continuousstate pubsubstate;				
+			}
+			inputs
+			{
+				inputport port_vehicle_status from vehicle_status estimated_freq 30 sample_tolerance 0.1
+				{
+					continuousstate pubsubstate
+					updatefunction "updateconstraints"
+				}
+			}
+			outputs
+			{
+				outputport port_update_constraints to motion_dynamic_constraints estimated_freq 10 {continuousstate pubsubstate}
 			}
 		}
 		
@@ -190,6 +218,8 @@ network hotaru
 				
 			}
 		}
+		
+		
 		
 		node AbstractHotaruPlannerNode in hotaru_node_elements namespace hotaru
 		{
