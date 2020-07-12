@@ -27,7 +27,7 @@ import java.util.HashSet
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class RosNetworkDslGenerator extends AbstractGenerator {
-	
+	/*
 	def static generateGraphViewOfNode(Node n)
 	{
 		val Graph g = graph("example1").directed()
@@ -38,7 +38,7 @@ class RosNetworkDslGenerator extends AbstractGenerator {
         );
 		Graphviz.fromGraph(g).height(100).render(Format.PNG).toFile(new File("example/ex1.png"));
 	}
-	
+	*/
 	def static void generateRos2Program(IFileSystemAccess2 fsa, Node n)
 	{
 		switch (n.language)

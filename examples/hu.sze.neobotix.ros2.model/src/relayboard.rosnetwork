@@ -1,0 +1,58 @@
+network neobotix
+{
+	networktype ROS2
+	topic_msgs
+	{
+		messagetype neobotix_mp_msgs/DriveCommands
+		messagetype neobotix_mp_msgs/DriveStates
+		messagetype neobotix_mp_msgs/LCDOutput
+		messagetype neobotix_mp_msgs/BatState
+		messagetype neobotix_mp_msgs/EmergencyStopState
+		messagetype neobotix_mp_msgs/Temperatur
+		messagetype nav_msgs/Odometry
+		messagetype geometry_msgs/TwistStamped
+	}
+	topics
+	{
+		topic "emergency_stop_state": EmergencyStopState;
+		topic "battery_state": BatState;
+		topic "temperature": Temperatur;
+		topic "drive_commands": DriveCommands;
+		topic "drive_state": TwistStamped;
+		topic "odom": Odometry;
+		topic "cmd_vel": TwistStamped;
+	}
+	
+	nodes
+	{
+		node NeoRelayBoard in neo_serrelayboard namespace neobotix
+		{
+			language Cpp
+			parameters
+			{
+				parametergroup realyboardparameters generate true
+				{
+					int NumComPort = 1 <0, 1> -> "relayboard_parameters.num_com_port"
+				}
+			}
+			continuousstate
+			{
+				continuousstate relayboardstate;
+			}
+			inputs
+			{
+				inputport port_cmd_vel from cmd_vel estimated_freq 30 sample_tolerance 0.1
+				{
+					continuousstate relayboardstate
+					updatefunction "updatecommand"
+				}
+			}
+			outputs
+			{
+				outputport port_odom to odom estimated_freq 30{	continuousstate relayboardstate	}
+				outputport port_temperature to temperature estimated_freq 30{	continuousstate relayboardstate	}
+				outputport port_drive_state to drive_state estimated_freq 30{	continuousstate relayboardstate	}
+			}
+		}
+	}
+}

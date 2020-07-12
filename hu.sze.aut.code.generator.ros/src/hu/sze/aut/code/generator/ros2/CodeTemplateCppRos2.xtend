@@ -5,6 +5,7 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TopicMessage
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.InputPort
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.ContinousState
 import hu.sze.aut.code.generator.ros.CodeGenerationUtils
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Topic
 
 public class CodeTemplateCppRos2 {
 	
@@ -38,12 +39,12 @@ public class CodeTemplateCppRos2 {
 		const bool debug;
 		const bool bypass_behavior;
 		// Input messages
-		«FOR port: s.receivesFrom»
-		«generateMsgType(port.topic.type)» msg_«port.id.toLowerCase»;
+		«FOR port: s.receivesFrom.filter[it.channel instanceof Topic]»
+		«generateMsgType((port.channel as Topic).type)» msg_«port.id.toLowerCase»;
 		«ENDFOR»
 		// Output messages
-		«FOR port: s.producesTo»
-		«generateMsgType(port.topic.type)» msg_«port.id.toLowerCase»;
+		«FOR port: s.producesTo.filter[it.channel instanceof Topic]»
+		«generateMsgType((port.channel as Topic).type)» msg_«port.id.toLowerCase»;
 		«ENDFOR»
 	}
 	«ENDFOR»
@@ -58,11 +59,11 @@ public class CodeTemplateCppRos2 {
 		«FOR s: node.continousstate»
 		std::unique_ptr<«generateContinuousStateName(s)»> _«s.name»;
 		«ENDFOR»
-		«FOR port: node.inputport»
-		ros::Subscription<«generateMsgType(port.topic.type)»>::SharedPtr «port.id»;
+		«FOR port: node.inputport.filter[it.channel instanceof Topic]»
+		ros::Subscription<«generateMsgType((port.channel as Topic).type)»>::SharedPtr «port.id»;
 		«ENDFOR»
-		«FOR port: node.outputport»
-		ros::Publisher<«generateMsgType(port.topic.type)»>::SharedPtr «port.id»;
+		«FOR port: node.outputport.filter[it.channel instanceof Topic]»
+		ros::Publisher<«generateMsgType((port.channel as Topic).type)»>::SharedPtr «port.id»;
 		«ENDFOR»
 		std::mutex sm_mutex;
 	public:
@@ -74,10 +75,10 @@ public class CodeTemplateCppRos2 {
 		virtual bool initMiddleware(const bool debug, const bool bypass_behavior);
 		
 		// Subscriber callbacks
-		«FOR port: node.inputport»
-		void cb«port.id.toFirstUpper»(const «generateMsgType(port.topic.type)»::SharedPtr msg);
+		«FOR port: node.inputport.filter[it.channel instanceof Topic]»
+		void cb«port.id.toFirstUpper»(const «generateMsgType((port.channel as Topic).type)»::SharedPtr msg);
 		«IF port.sync_function_name!==null»
-		virtual void «port.sync_function_name»(const «generateMsgType(port.topic.type)»::SharedPtr msg) = 0;
+		virtual void «port.sync_function_name»(const «generateMsgType((port.channel as Topic).type)»::SharedPtr msg) = 0;
 		«ENDIF»
 		«ENDFOR»
 		// Publisher functions
@@ -106,17 +107,17 @@ public class CodeTemplateCppRos2 {
 		_«state.name» = std::make_unique<«generateContinuousStateName(state)»>(debug, bypass_behavior);
 		«ENDFOR»
 		// Initialize ROS 2 publishers
-		«FOR port: node.outputport»
-		«port.id» = create_publisher<«generateMsgType(port.topic.type)»>("«port.topic.name»", 10);
+		«FOR port: node.outputport.filter[it.channel instanceof Topic]»
+		«port.id» = create_publisher<«generateMsgType((port.channel as Topic).type)»>("«port.channel.name»", 10);
 		«ENDFOR»
 		// Initialize ROS 2 subscribers
-		«FOR port: node.inputport»
-		«port.id» = create_subscription<«generateMsgType(port.topic.type)»>("«port.topic.name»", 10, std::bind(&«interfaceName(node)»::«generateCallbackName(port)», this, _1));
+		«FOR port: node.inputport.filter[it.channel instanceof Topic]»
+		«port.id» = create_subscription<«generateMsgType((port.channel as Topic).type)»>("«port.channel.name»", 10, std::bind(&«interfaceName(node)»::«generateCallbackName(port)», this, _1));
 		«ENDFOR»
 	}
 	
-	«FOR port: node.inputport»	
-	void «interfaceName(node)»::«generateCallbackName(port)»(const «generateMsgType(port.topic.type)»::SharedPtr msg)
+	«FOR port: node.inputport.filter[it.channel instanceof Topic]»	
+	void «interfaceName(node)»::«generateCallbackName(port)»(const «generateMsgType((port.channel as Topic).type)»::SharedPtr msg)
 	{
 		«IF port.continousState!==null»
 		_«port.continousState.name»->msg_«port.id.toLowerCase» = msg;

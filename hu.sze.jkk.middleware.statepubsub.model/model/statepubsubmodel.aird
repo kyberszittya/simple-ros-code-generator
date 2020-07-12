@@ -540,7 +540,7 @@
             <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eTQRd8awEemB-apD-2wIJQ" x="36" y="-10"/>
           </children>
           <children xmi:type="notation:Node" xmi:id="_eTQReMawEemB-apD-2wIJQ" type="6002">
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eTQRecawEemB-apD-2wIJQ" x="220" y="10"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eTQRecawEemB-apD-2wIJQ" x="20" y="-20"/>
           </children>
           <children xmi:type="notation:Node" xmi:id="_eTQResawEemB-apD-2wIJQ" type="6003">
             <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eTQRe8awEemB-apD-2wIJQ" x="11" y="10"/>
