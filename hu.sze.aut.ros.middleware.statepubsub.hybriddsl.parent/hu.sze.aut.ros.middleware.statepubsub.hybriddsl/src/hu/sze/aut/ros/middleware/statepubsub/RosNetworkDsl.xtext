@@ -3,29 +3,33 @@ grammar hu.sze.aut.ros.middleware.statepubsub.RosNetworkDsl with org.eclipse.xte
 import "http://jkk.sze.hu/statepubsubmodel" 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
-MiddleWareNetwork returns MiddlewareNetwork:
-	{MiddlewareNetwork}
+MiddleWareNetwork returns Stack:
+	{Stack}
 	"network" name=EString
 	'{'
 		'networktype' networktype=NetworkType		
-		'topic_msgs'
-		'{'
-			msgs+=TopicMessage
-			(msgs+=TopicMessage)*
-		'}'
-		'topics'
+		filepackage+=FilePackage (filepackage+=FilePackage)*
+		'channels'
 		'{'
 			channels+=Channel
 			(channels+=Channel)*
 		'}'
-		'nodes' 
-		'{'
-			node+=Node
-			(node+=Node)*
-		'}'
 		
 	'}'
 ;
+
+FilePackage returns FilePackage:
+	{FilePackage}
+	'package' name=EString 
+	'{' 
+	abstractroselement+= AbstractRosFileElement (abstractroselement+=AbstractRosFileElement)*
+	'}'
+;
+
+AbstractRosFileElement returns AbstractRosFileElement:
+	AbstractMessageType | Node
+;
+
 
 AbstractMessageType returns AbstractMsgType:
 	TopicMessage | ServiceType
@@ -39,12 +43,12 @@ NetworkType returns NetworkType:
 
 TopicMessage returns TopicMessage:
 	{TopicMessage}
-	'messagetype' prefix=EString'/'name=EString
+	'messagetype' name=EString
 ;
 
 ServiceType returns ServiceType:
 	{ServiceType}
-	'saervicetype' prefix=EString'/'name=EString
+	'saervicetype' name=EString
 ;
 
 Channel returns Channel:
@@ -96,7 +100,7 @@ AbstractNodeParameter returns AbstractNodeParameter:
 
 Node returns Node:
 	{Node}
-	'node' name=EString 'in' rospackage=EString "namespace" namespace=EString ("implements" implements=[Node|EString])?
+	'node' name=EString "namespace" namespace=EString ("implements" implements=[Node|EString])?
 	'{'
 		"language" language=LanguageType
 		('parameters'

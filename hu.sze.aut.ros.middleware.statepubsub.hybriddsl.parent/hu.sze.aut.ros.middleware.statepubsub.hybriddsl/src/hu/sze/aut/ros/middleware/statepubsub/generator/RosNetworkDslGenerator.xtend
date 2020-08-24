@@ -11,15 +11,14 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Node
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.LanguageType
 import hu.sze.aut.code.generator.ros2.CodeTemplatePython
 import hu.sze.aut.code.generator.ros2.CodeTemplateCppRos2
-import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.MiddlewareNetwork
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Stack
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.NetworkType
 import hu.sze.aut.code.generator.ros.RosCodeTemplates
 import hu.sze.aut.code.generator.ros.GenerateYamlConfiguration
-import static guru.nidi.graphviz.attribute.Records.*;
-import static guru.nidi.graphviz.model.Compass.*;
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.InputPort
 import java.util.Set
 import java.util.HashSet
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.FilePackage
 
 /**
  * Generates code from your model files on save.
@@ -45,12 +44,12 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 		{
 			case LanguageType::PYTHON:
 			{
-				fsa.generateFile('''«n.rospackage»/scripts/«n.name».py''', CodeTemplatePython::generatePythonNode(n))				
+				//fsa.generateFile('''«n.rospackage»/scripts/«n.name».py''', CodeTemplatePython::generatePythonNode(n))				
 			}
 			case LanguageType::CPP:
 			{
-				fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/gen_«n.name.toLowerCase».hpp''', CodeTemplateCppRos2::generateRos2InterfaceHeader(n))
-				fsa.generateFile('''«n.rospackage»/src/gen_«n.name.toLowerCase».cpp''', CodeTemplateCppRos2::generateRos2Source(n))
+				//fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/gen_«n.name.toLowerCase».hpp''', CodeTemplateCppRos2::generateRos2InterfaceHeader(n))
+				//fsa.generateFile('''«n.rospackage»/src/gen_«n.name.toLowerCase».cpp''', CodeTemplateCppRos2::generateRos2Source(n))
 			}
 		}
 	}
@@ -78,31 +77,35 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 				{
 					for (g: GenerateYamlConfiguration::selectGeneratedStructures(n))
 					{
+						/*
 						fsa.generateFile(
-							'''«n.rospackage»/include/«n.rospackage»/«g.name.toLowerCase»_struct.hpp''',						
+							//'''«n.rospackage»/include/«n.rospackage»/«g.name.toLowerCase»_struct.hpp''',						
 							GenerateYamlConfiguration::generateParamStructure(n, g)							
 						)
+						*  
+						*/
 					}
-					fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/default_config_«n.name.toLowerCase».hpp''', GenerateYamlConfiguration::generateDefaultParameterValueHeader(n))
-					fsa.generateFile('''«n.rospackage»/src/gen_config_«n.name.toLowerCase».cpp''', GenerateYamlConfiguration::generateYamlConfigReaderRos(n))
+					//fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/default_config_«n.name.toLowerCase».hpp''', GenerateYamlConfiguration::generateDefaultParameterValueHeader(n))
+					//fsa.generateFile('''«n.rospackage»/src/gen_config_«n.name.toLowerCase».cpp''', GenerateYamlConfiguration::generateYamlConfigReaderRos(n))
 				}
 				val ps = getSyncInputPorts(n)
-				fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/gen_«n.name.toLowerCase».hpp''', RosCodeTemplates::generateRosInterfaceHeader(n, ps.size > 0))
-				fsa.generateFile('''«n.rospackage»/src/gen_«n.name.toLowerCase».cpp''', RosCodeTemplates::generateInterfaceRosSource(n, ps.size > 0))
+				//fsa.generateFile('''«n.rospackage»/include/«n.rospackage»/gen_«n.name.toLowerCase».hpp''', RosCodeTemplates::generateRosInterfaceHeader(n, ps.size > 0))
+				//fsa.generateFile('''«n.rospackage»/src/gen_«n.name.toLowerCase».cpp''', RosCodeTemplates::generateInterfaceRosSource(n, ps.size > 0))
 			}
 		}
 	}
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 	
-		val MiddlewareNetwork network = resource.allContents.filter[it instanceof MiddlewareNetwork].head as MiddlewareNetwork
+		val Stack network = resource.allContents.filter[it instanceof Stack].head as Stack
 		val mid_type = network.networktype
 		
 		switch(mid_type)
 		{
 			case NetworkType::ROS2:
 			{
-				resource.allContents.filter[it instanceof Node].forEach[
+				resource.allContents.filter[it instanceof FilePackage].forEach[
+					
 					val n = it as Node
 					generateRos2Program(fsa, n)
 							
@@ -110,7 +113,9 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 			}
 			case NetworkType::ROS1:
 			{
-				resource.allContents.filter[it instanceof Node].forEach[
+				// TODO: ROS currently not supported, rewrite it according to new structure
+				/*
+				resource.allContents.filter[it instanceof FilePackage].forEach[
 					val n = it as Node
 					generateRosProgram(fsa, n)
 					fsa.generateFile(
@@ -119,8 +124,11 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 					)
 						
 				]
+				* 
+				*/
 			}
 		}
+		/*
 		network.node.filter[it instanceof Node].forEach[
 			val n = it as Node
 			fsa.generateFile('''«n.rospackage»/param/default.yaml''', 
@@ -136,7 +144,8 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 			// TODO: Not working yet
 			//RosNetworkDslGenerator::generateGraphViewOfNode(it)
 		]		
-	
+		* 
+		*/
 //		fsa.generateFile('greetings.txt', 'People to greet: ' + 
 //			resource.allContents
 //				.filter(Greeting)
