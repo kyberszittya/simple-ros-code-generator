@@ -19,6 +19,7 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.InputPort
 import java.util.Set
 import java.util.HashSet
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.FilePackage
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Port
 
 /**
  * Generates code from your model files on save.
@@ -57,11 +58,11 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 	def static Set<InputPort> getSyncInputPorts(Node n)
 	{
 		val Set<InputPort> ports = new HashSet(); 
-		for (p: n.inputport)
+		for (p: n.port.filter[it instanceof InputPort])
 		{
-			if (p.synchronizesState !== null)
+			if ((p as InputPort).synchronizesState !== null)
 			{
-				ports.add(p)
+				ports.add(p as InputPort)
 			}
 		}
 		return ports;
@@ -105,9 +106,12 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 			case NetworkType::ROS2:
 			{
 				resource.allContents.filter[it instanceof FilePackage].forEach[
-					
-					val n = it as Node
-					generateRos2Program(fsa, n)
+					val pak = it as FilePackage
+					if (pak.generateartifact)
+					{
+						
+					}
+					//generateRos2Program(fsa, n)					
 							
 				]
 			}

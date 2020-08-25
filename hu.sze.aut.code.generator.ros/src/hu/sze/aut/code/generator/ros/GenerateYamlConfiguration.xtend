@@ -45,12 +45,12 @@ class GenerateYamlConfiguration {
 	'''
 	
 	def static generateCallbackGenerateDynamicCfgCallback(Node n)'''
-	#include <«n.rospackage»/«n.name.toLowerCase».hpp>
+	#include <«n.filepackage.name»/«n.name.toLowerCase».hpp>
 	
 	namespace «n.namespace»
 	{
 	
-	void «n.name»::callbackReconfigure(«n.rospackage»::«n.name»Config & config,uint32_t level)
+	void «n.name»::callbackReconfigure(«n.filepackage.name»::«n.name»Config & config,uint32_t level)
 	{
 		«FOR param: n.nodeparameters»
 		«generateDynCfgCallbackUpdate(param)»
@@ -67,7 +67,7 @@ class GenerateYamlConfiguration {
 	«FOR p: n.nodeparameters»
 	«generateDynamicReconfigureParameter(p, "gen")»
 	«ENDFOR»
-	exit(gen.generate("«n.rospackage»", "«n.name»", "«n.name.toFirstUpper»"))
+	exit(gen.generate("«n.filepackage.name»", "«n.name»", "«n.name.toFirstUpper»"))
 	'''
 	
 	def static CharSequence generateNodeParameter(AbstractNodeParameter param)'''
@@ -183,10 +183,10 @@ class GenerateYamlConfiguration {
 	'''
 	
 	def static generateYamlConfigReaderRos(Node n)'''
-	#include "«n.rospackage.toLowerCase»/«n.name.toLowerCase».hpp"
-	#include "«n.rospackage.toLowerCase»/default_config_«n.name.toLowerCase».hpp"
+	#include "«n.filepackage.name.toLowerCase»/«n.name.toLowerCase».hpp"
+	#include "«n.filepackage.name.toLowerCase»/default_config_«n.name.toLowerCase».hpp"
 	«FOR v: selectGeneratedStructures(n)»
-	#include <«n.rospackage»/«v.name.toLowerCase»_struct.hpp>
+	#include <«n.filepackage.name»/«v.name.toLowerCase»_struct.hpp>
 	«ENDFOR»
 	
 	namespace «n.namespace»

@@ -5,34 +5,35 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 MiddleWareNetwork returns Stack:
 	{Stack}
-	"network" name=EString
+	"stack" name=EString
 	'{'
-		'networktype' networktype=NetworkType		
+		'networktype' networktype=NetworkType
 		filepackage+=FilePackage (filepackage+=FilePackage)*
+		(
 		'channels'
 		'{'
 			channels+=Channel
 			(channels+=Channel)*
 		'}'
-		
+		)?
 	'}'
 ;
 
 FilePackage returns FilePackage:
 	{FilePackage}
-	'package' name=EString 
+	'package' name=EString (generateartifact?='generate')?
 	'{' 
 	abstractroselement+= AbstractRosFileElement (abstractroselement+=AbstractRosFileElement)*
 	'}'
 ;
 
 AbstractRosFileElement returns AbstractRosFileElement:
-	AbstractMessageType | Node
+	AbstractMessageType | Node 
 ;
 
 
 AbstractMessageType returns AbstractMsgType:
-	TopicMessage | ServiceType
+	TopicMessage | ServiceType 
 ;
 
 
@@ -48,7 +49,7 @@ TopicMessage returns TopicMessage:
 
 ServiceType returns ServiceType:
 	{ServiceType}
-	'saervicetype' name=EString
+	'servicetype' name=EString
 ;
 
 Channel returns Channel:
@@ -57,12 +58,12 @@ Channel returns Channel:
 
 Service returns Service:
 	{Service}
-	'service' name=EString ':' type=[ServiceType|EString]';'
+	'service' name=EString ':' type=[ServiceType|EString]
 ;
 
 Topic returns Topic:
 	{Topic}
-	'topic' name=EString ':' type=[TopicMessage|EString]';'
+	'topic' name=EString ':' type=[TopicMessage|EString]
 ;
 
 NodeParameter returns NodeParameter:
@@ -108,37 +109,36 @@ Node returns Node:
 		nodeparameters+=AbstractNodeParameter
 		(nodeparameters+=AbstractNodeParameter)*
 		'}')?
-		("continuousstate"
+		("stati"
 		'{'
 		continousstate+=ContinuousState
 		'}'
 		)?
-		("inputs"
-		'{'
-		inputport+=InputPort(inputport+=InputPort)*
-		'}')?
-		("outputs"
-		'{'
-		outputport+=OutputPort(outputport+=OutputPort)*
-		'}')?
+		// Port definition
+		(
+			port += Port (port += Port)*
+		)?
 	'}'
 ;
 
 ContinuousState returns ContinousState:
 	{ContinousState}
-	'continuousstate' name=EString ';'
+	'continuousstate' name=EString
 ;
 
 LanguageType returns LanguageType:
 	'Python' | 'Cpp' 
 ;
 
+Port returns Port:
+	InputPort | OutputPort
+;
 
 InputPort returns InputPort:
 	{InputPort}
-	'inputport' id=EString 'from' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double)? 
+	id=EString '<-' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double (debug?='debug')?)? 
 	'{'
-		('debug' debug=EBoolean)?
+		
 		('continuousstate' continousState=[ContinousState|EString])?
 		('updatefunction' sync_function_name=EString)?
 		('syncstate' synchronizesState=[ContinousState|EString])?
@@ -147,11 +147,9 @@ InputPort returns InputPort:
 
 OutputPort returns OutputPort:
 	{OutputPort}
-	'outputport' id=EString 'to' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt)
+	id=EString '->' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt (debug?='debug')?)
 	'{'
-		('debug' debug=EBoolean)?
 		('continuousstate' continousState=[ContinousState|EString])?
-		
 	'}'
 ;
 

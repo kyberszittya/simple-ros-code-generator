@@ -5,18 +5,20 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TopicMessage
 import java.util.HashSet
 import java.util.Set
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Topic
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.InputPort
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.OutputPort
 
 class CodeGenerationUtils {
 	def static selectAllMessages(Node node)
 	{
 		val Set<TopicMessage> messages = new HashSet
-		for (port: node.inputport)
+		for (port: node.port.filter[it instanceof InputPort])
 		{
-			messages.add((port.channel as Topic).type)
+			messages.add(((port as InputPort).channel as Topic).type)
 		}
-		for (port: node.outputport)
+		for (port: node.port.filter[it instanceof OutputPort])
 		{
-			messages.add((port.channel as Topic).type)
+			messages.add(((port as OutputPort).channel as Topic).type)
 		}
 		return messages
 	}
@@ -24,11 +26,11 @@ class CodeGenerationUtils {
 	def static commentNodeHeader(Node node)'''
 	/**
 	 *
-	 «FOR port: node.inputport»
-	 * @attribute «port.id»: subscribes to topic «(port.channel as Topic).name» 
+	 «FOR port: node.port.filter[it instanceof InputPort]»
+	 * @attribute «port.id»: subscribes to topic «((port as InputPort).channel as Topic).name» 
 	 «ENDFOR»
-	 «FOR port: node.outputport»
-	 * @attribute «port.id»: publishes to topic «(port.channel as Topic).name»
+	 «FOR port: node.port.filter[it instanceof OutputPort]»
+	 * @attribute «port.id»: publishes to topic «((port as OutputPort).channel as Topic).name»
 	 «ENDFOR»
 	 */
 	'''

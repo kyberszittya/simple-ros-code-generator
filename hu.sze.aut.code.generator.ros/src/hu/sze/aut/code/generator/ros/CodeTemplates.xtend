@@ -16,8 +16,8 @@ class RosCodeTemplates {
 		return type.replace('/', "::")
 	}
 	
-	def static getMsgInclude(TopicMessage msg)'''#include <«msg.prefix»/«msg.name».h>'''
-	def static getMsgNamespace(TopicMessage msg)'''«msg.prefix»::«msg.name»'''
+	def static getMsgInclude(TopicMessage msg)'''#include <«msg.filepackage.name»/«msg.name».h>'''
+	def static getMsgNamespace(TopicMessage msg)'''«msg.filepackage.name»::«msg.name»'''
 	
 	def static genPublisherFunctionName(OutputPort port)'''publish«(port.channel as Topic).name.toFirstUpper.replaceAll('/','_')»'''
 	
@@ -128,7 +128,7 @@ class RosCodeTemplates {
 		'''
 		
 	def static generateInterfaceRosSource(Node node, boolean synch)'''
-		#include <«node.rospackage»/«headerFileName(node)»>
+		#include <«node.filepackage.name»/«headerFileName(node)»>
 		
 		«IF node.namespace!==null»
 		namespace «node.namespace» {

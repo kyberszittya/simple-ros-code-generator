@@ -11,8 +11,6 @@
         eType="#//FilePackage" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="node" lowerBound="1" eType="#//Node"
-        eOpposite="#//Node/inputport"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="continousState" eType="#//ContinousState"
         eOpposite="#//ContinousState/receivesFrom"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sync_function_name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -21,8 +19,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//Channel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="node" lowerBound="1" eType="#//Node"
-        eOpposite="#//Node/outputport"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="continousState" eType="#//ContinousState"
         eOpposite="#//ContinousState/producesTo"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//Channel"
@@ -37,10 +33,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sample_tolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//DescriptiveElement #//AbstractRosFileElement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="outputport" upperBound="-1"
-        eType="#//OutputPort" containment="true" eOpposite="#//OutputPort/node"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inputport" upperBound="-1"
-        eType="#//InputPort" containment="true" eOpposite="#//InputPort/node"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="continousstate" upperBound="-1"
         eType="#//ContinousState" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="implements" eType="#//Node"/>
@@ -50,6 +42,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="#//LanguageType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodeparameters" upperBound="-1"
         eType="#//AbstractNodeParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" upperBound="-1" eType="#//Port"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TopicMessage" eSuperTypes="#//AbstractMsgType"/>
   <eClassifiers xsi:type="ecore:EClass" name="Topic" eSuperTypes="#//Channel">
@@ -168,17 +162,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//Channel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//ServiceType"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FilePackage">
+  <eClassifiers xsi:type="ecore:EClass" name="FilePackage" eSuperTypes="#//RosElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="abstractroselement" upperBound="-1"
-        eType="#//AbstractRosFileElement" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="msgs" upperBound="-1" eType="#//AbstractMsgType"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="node" upperBound="-1" eType="#//Node"
-        containment="true"/>
+        eType="#//AbstractRosFileElement" containment="true" eOpposite="#//AbstractRosFileElement/filepackage"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AbstractRosFileElement" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractRosFileElement" abstract="true"
+      eSuperTypes="#//RosElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filepackage" eType="#//FilePackage"
+        eOpposite="#//FilePackage/abstractroselement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RosElement" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generateartifact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -11,7 +11,7 @@ public class CodeTemplateCppRos2 {
 	
 	def static interfaceName(Node node)'''Interface_«node.name.toFirstUpper»'''
 	
-	def static generateMsgType(TopicMessage type)'''«type.prefix»::msg::«type.name»'''
+	def static generateMsgType(TopicMessage type)'''«type.filepackage.name»::msg::«type.name»'''
 	
 	def static generateCallbackName(InputPort port)'''cb«port.id»'''
 	
@@ -50,7 +50,7 @@ public class CodeTemplateCppRos2 {
 	«ENDFOR»
 	
 	«FOR m: CodeGenerationUtils::selectAllMessages(node)»
-	#include <«m.prefix»/«m.name»>
+	#include <«m.filepackage.name»/«m.name»>
 	«ENDFOR»	
 	
 	class «interfaceName(node)»: public rclcpp::Node, public rei::Interface_SimpleRos2Node
@@ -93,7 +93,7 @@ public class CodeTemplateCppRos2 {
 	'''	
 	
 	def static generateRos2Source(Node node)'''
-	#include "«node.rospackage»/gen_«node.name.toLowerCase».hpp"
+	#include "«node.filepackage.name»/gen_«node.name.toLowerCase».hpp"
 	
 	bool «interfaceName(node)»::initTimeoutStateMachine()
 	{

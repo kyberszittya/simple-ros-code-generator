@@ -16,7 +16,7 @@ class CodeTemplatePython {
 	from rclpy.node import Node
 	
 	«FOR msg: CodeGenerationUtils::selectAllMessages(node)»
-	from «msg.prefix».msg import «msg.name»
+	from «msg.filepackage.name».msg import «msg.name»
 	«ENDFOR»
 	
 	«FOR s: node.continousstate»
