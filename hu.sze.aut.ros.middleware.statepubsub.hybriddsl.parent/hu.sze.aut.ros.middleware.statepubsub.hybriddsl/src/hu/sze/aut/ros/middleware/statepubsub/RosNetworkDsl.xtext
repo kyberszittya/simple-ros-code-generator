@@ -7,7 +7,8 @@ MiddleWareNetwork returns Stack:
 	{Stack}
 	"stack" name=EString
 	'{'
-		'networktype' networktype=NetworkType
+		'networktype' (networktype+=NetworkType) (','networktype+=NetworkType)*
+		
 		filepackage+=FilePackage (filepackage+=FilePackage)*
 		(
 		'channels'
@@ -15,16 +16,31 @@ MiddleWareNetwork returns Stack:
 			channels+=Channel
 			(channels+=Channel)*
 		'}'
-		)?
+		)?		
 	'}'
 ;
 
 FilePackage returns FilePackage:
 	{FilePackage}
 	'package' name=EString (generateartifact?='generate')?
-	'{' 
+	'{'
 	abstractroselement+= AbstractRosFileElement (abstractroselement+=AbstractRosFileElement)*
+	(filter+=FilterDefinition (filter+=FilterDefinition)*)?
 	'}'
+;
+
+FilterDefinition returns FilterDefinition:
+	{FilterDefinition}
+	'filter' name=EString
+	'{'
+	'input' input_field+=SerializedField ('input' input_field+=SerializedField)*
+	'output' output_field=SerializedField
+	'}'
+;
+
+SerializedField returns SerializedField:
+	{SerializedField}
+	'field'  id=EString topicmessage=[TopicMessage|EString]
 ;
 
 AbstractRosFileElement returns AbstractRosFileElement:
@@ -99,11 +115,15 @@ AbstractNodeParameter returns AbstractNodeParameter:
 	NodeParameter | NodeParameterGroup
 ; 
 
-Node returns Node:
-	{Node}
-	'node' name=EString "namespace" namespace=EString ("implements" implements=[Node|EString])?
+RosRuntimeElement returns RosRuntimeElement:
+	Node |  Library
+;
+
+Library returns LibraryNode:
+	{LibraryNode}
+	'librarynode' name=EString 'namespace' namespace=EString ('implements' implements=[Node|EString])?
 	'{'
-		"language" language=LanguageType
+		"language" language+=LanguageType (',' language+=LanguageType)*
 		('parameters'
 		'{'
 		nodeparameters+=AbstractNodeParameter
@@ -116,9 +136,41 @@ Node returns Node:
 		)?
 		// Port definition
 		(
+			
+			port += Port (port += Port)*
+			
+		)?
+	'}'	
+;
+ 
+Node returns Node:
+	{Node}
+	'node' name=EString "namespace" namespace=EString ("implements" implements=[Node|EString])?
+	'{'
+		"language" language+=LanguageType (',' language+=LanguageType)*
+		('parameters'
+		'{'
+		nodeparameters+=AbstractNodeParameter
+		(nodeparameters+=AbstractNodeParameter)*
+		'}')?
+		("stati"
+		'{'
+		continousstate+=ContinuousState
+		'}'
+		)?		
+		// Port definition
+		(
 			port += Port (port += Port)*
 		)?
+		(
+			filterconnection += FilterConnection (filterconnection+=FilterConnection)*
+		)?
 	'}'
+;
+
+FilterConnection returns FilterConnection:
+	{FilterConnection}
+	'filter' name=EString ":" usedfilter=[FilterDefinition|EString] '['input+=[InternalNode|EString] (',' input+=[InternalNode|EString])* ']' '->' output=[InternalNode|EString]
 ;
 
 ContinuousState returns ContinousState:
@@ -136,21 +188,14 @@ Port returns Port:
 
 InputPort returns InputPort:
 	{InputPort}
-	id=EString '<-' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double (debug?='debug')?)? 
-	'{'
-		
-		('continuousstate' continousState=[ContinousState|EString])?
-		('updatefunction' sync_function_name=EString)?
-		('syncstate' synchronizesState=[ContinousState|EString])?
-	'}'
+	'port' name=EString '<-' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt 'sample_tolerance' sample_tolerance=Double (debug?='debug')?)? ('syncstate' synchronizesState=[ContinousState|EString])?
+	
 ;
 
 OutputPort returns OutputPort:
 	{OutputPort}
-	id=EString '->' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt (debug?='debug')?)
-	'{'
-		('continuousstate' continousState=[ContinousState|EString])?
-	'}'
+	'port' name=EString '->' channel=[Channel|EString] ('estimated_freq' estimated_freq=EInt (debug?='debug')?)
+	
 ;
 
 EBoolean returns ecore::EBoolean: 

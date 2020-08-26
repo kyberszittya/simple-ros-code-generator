@@ -26,39 +26,34 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Stack/filepackage"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//InputPort">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/continousState"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//InputPort/sync_function_name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/synchronizesState"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//InputPort/channel"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//OutputPort">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//OutputPort/continousState"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//OutputPort/channel"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//Port">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Port/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Port/estimated_freq"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Port/debug"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Port/sync_time_stamp"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Port/sample_tolerance"/>
     </genClasses>
-    <genClasses ecoreClass="statepubsubmodel.ecore#//Node">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Node/continousstate"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Node/implements"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Node/namespace"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Node/behavior"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//Node/language"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Node/nodeparameters"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Node/port"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//RosRuntimeElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/continousstate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/implements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//RosRuntimeElement/namespace"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/behavior"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//RosRuntimeElement/language"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/nodeparameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/port"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/filterconnection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//RosRuntimeElement/internaledge"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//TopicMessage"/>
     <genClasses ecoreClass="statepubsubmodel.ecore#//Topic">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//Topic/type"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//ContinousState">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//ContinousState/producesTo"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//ContinousState/receivesFrom"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//ContinousState/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//ContinousState/synchronizeWith"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//ContinousState/workerthread"/>
     </genClasses>
@@ -149,6 +144,7 @@
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//FilePackage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilePackage/abstractroselement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilePackage/filter"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//AbstractRosFileElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//AbstractRosFileElement/filepackage"/>
@@ -156,6 +152,32 @@
     <genClasses ecoreClass="statepubsubmodel.ecore#//RosElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//RosElement/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//RosElement/generateartifact"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//Node"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//LibraryNode"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//FilterDefinition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//FilterDefinition/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilterDefinition/input_field"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilterDefinition/output_field"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//FilterConnection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilterConnection/usedfilter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilterConnection/input"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilterConnection/output"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//InternalNode"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//SerializedField">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//SerializedField/topicmessage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//SerializedField/id"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//InternalEdge"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//InternalElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//InternalElement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//InternalElement/debug"/>
+    </genClasses>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//DirectConnection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//DirectConnection/port"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//DirectConnection/continousstate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

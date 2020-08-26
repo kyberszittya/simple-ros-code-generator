@@ -6,55 +6,50 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="channels" upperBound="-1"
         eType="#//Channel" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="networktype" eType="#//NetworkType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="networktype" ordered="false"
+        upperBound="-1" eType="#//NetworkType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="filepackage" upperBound="-1"
         eType="#//FilePackage" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="continousState" eType="#//ContinousState"
-        eOpposite="#//ContinousState/receivesFrom"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sync_function_name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="synchronizesState" eType="#//ContinousState"
         eOpposite="#//ContinousState/synchronizeWith"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//Channel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="continousState" eType="#//ContinousState"
-        eOpposite="#//ContinousState/producesTo"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//Channel"
         eOpposite="#//Channel/portFrom"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true" eSuperTypes="#//InternalNode">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="estimated_freq" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sync_time_stamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sample_tolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//DescriptiveElement #//AbstractRosFileElement">
+  <eClassifiers xsi:type="ecore:EClass" name="RosRuntimeElement" abstract="true" eSuperTypes="#//DescriptiveElement #//AbstractRosFileElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="continousstate" upperBound="-1"
         eType="#//ContinousState" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="implements" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implements" eType="#//RosRuntimeElement"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="behavior" upperBound="-1"
         eType="#//Behavior" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="#//LanguageType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" ordered="false"
+        upperBound="-1" eType="#//LanguageType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodeparameters" upperBound="-1"
         eType="#//AbstractNodeParameter" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" upperBound="-1" eType="#//Port"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filterconnection" upperBound="-1"
+        eType="#//FilterConnection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internaledge" upperBound="-1"
+        eType="#//InternalEdge" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TopicMessage" eSuperTypes="#//AbstractMsgType"/>
   <eClassifiers xsi:type="ecore:EClass" name="Topic" eSuperTypes="#//Channel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//TopicMessage"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ContinousState">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="producesTo" upperBound="-1"
-        eType="#//OutputPort" eOpposite="#//OutputPort/continousState"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="receivesFrom" upperBound="-1"
-        eType="#//InputPort" eOpposite="#//InputPort/continousState"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContinousState" eSuperTypes="#//InternalNode">
     <eStructuralFeatures xsi:type="ecore:EReference" name="synchronizeWith" upperBound="-1"
         eType="#//InputPort" eOpposite="#//InputPort/synchronizesState"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="workerthread" eType="#//WorkerThread"
@@ -165,6 +160,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="FilePackage" eSuperTypes="#//RosElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="abstractroselement" upperBound="-1"
         eType="#//AbstractRosFileElement" containment="true" eOpposite="#//AbstractRosFileElement/filepackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filter" upperBound="-1"
+        eType="#//FilterDefinition" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractRosFileElement" abstract="true"
       eSuperTypes="#//RosElement">
@@ -174,5 +171,34 @@
   <eClassifiers xsi:type="ecore:EClass" name="RosElement" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="generateartifact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//RosRuntimeElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LibraryNode" eSuperTypes="#//RosRuntimeElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FilterDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input_field" upperBound="-1"
+        eType="#//SerializedField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output_field" eType="#//SerializedField"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilterConnection" eSuperTypes="#//InternalEdge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedfilter" eType="#//FilterDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+        eType="#//InternalNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//InternalNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalNode" abstract="true" eSuperTypes="#//InternalElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SerializedField">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="topicmessage" eType="#//TopicMessage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalEdge" abstract="true" eSuperTypes="#//InternalElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectConnection" eSuperTypes="#//InternalEdge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="continousstate" eType="#//ContinousState"/>
   </eClassifiers>
 </ecore:EPackage>
