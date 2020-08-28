@@ -154,7 +154,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//RosElement/generateartifact"/>
     </genClasses>
     <genClasses ecoreClass="statepubsubmodel.ecore#//Node"/>
-    <genClasses ecoreClass="statepubsubmodel.ecore#//LibraryNode"/>
+    <genClasses ecoreClass="statepubsubmodel.ecore#//TemplateNode"/>
     <genClasses ecoreClass="statepubsubmodel.ecore#//FilterDefinition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute statepubsubmodel.ecore#//FilterDefinition/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference statepubsubmodel.ecore#//FilterDefinition/input_field"/>

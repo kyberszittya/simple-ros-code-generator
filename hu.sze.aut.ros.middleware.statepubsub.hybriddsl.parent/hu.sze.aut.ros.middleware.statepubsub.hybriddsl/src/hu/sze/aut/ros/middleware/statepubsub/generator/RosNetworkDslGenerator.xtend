@@ -20,6 +20,8 @@ import java.util.Set
 import java.util.HashSet
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.FilePackage
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Port
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TemplateNode
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.FilterDefinition
 
 /**
  * Generates code from your model files on save.
@@ -109,7 +111,21 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 					val pak = it as FilePackage
 					if (pak.generateartifact)
 					{
+						// Generate messages and srvs
+						// TODO: it would be wonderful, if we could generate messages, but of course, we can't now.
 						
+						// Generate filters
+						pak.abstractroselement.filter[it instanceof FilterDefinition].forEach[
+														
+						]						
+						// Generate nodes
+						pak.abstractroselement.filter[it instanceof Node].forEach[
+							
+						]
+						// Generate library nodes
+						pak.abstractroselement.filter[it instanceof TemplateNode].forEach[
+							
+						]						
 					}
 					//generateRos2Program(fsa, n)					
 							
