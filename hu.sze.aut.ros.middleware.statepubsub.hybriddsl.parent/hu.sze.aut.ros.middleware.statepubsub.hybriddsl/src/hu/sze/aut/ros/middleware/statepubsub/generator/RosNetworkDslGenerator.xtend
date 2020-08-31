@@ -22,6 +22,15 @@ import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.FilePackage
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.Port
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.TemplateNode
 import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.FilterDefinition
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import java.io.FileOutputStream
+import java.util.Collections
+import java.io.File
+import java.io.ByteArrayOutputStream
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+import hu.sze.jkk.middleware.statepubsub.model.statepubsubmodel.StatepubsubmodelPackage
+import org.eclipse.emf.common.util.URI
 
 /**
  * Generates code from your model files on save.
@@ -102,6 +111,17 @@ class RosNetworkDslGenerator extends AbstractGenerator {
 	
 		val Stack network = resource.allContents.filter[it instanceof Stack].head as Stack
 		val mid_type = network.networktype
+		val ByteArrayOutputStream fos = new ByteArrayOutputStream()
+		val ResourceSet resset = new ResourceSetImpl()
+		resset.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+		resset.getPackageRegistry().put(StatepubsubmodelPackage.eNS_URI, StatepubsubmodelPackage.eINSTANCE);
+		val r = resset.createResource(URI.createURI("save.xmi"))
+		r.contents.add(resource.contents.get(0))
+		
+		r.save(fos, Collections.EMPTY_MAP)
+		fsa.generateFile("save.xmi", fos.toString)
+		
 		
 		switch(mid_type)
 		{

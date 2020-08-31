@@ -70,7 +70,7 @@ Workflow {
 			}
 
 			serializer = {
-				generateStub = false
+				generateStub = true
 			}
 			validator = {
 				// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"

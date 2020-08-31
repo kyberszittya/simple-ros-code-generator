@@ -119,9 +119,9 @@ RosRuntimeElement returns RosRuntimeElement:
 	Node |  Library
 ;
 
-Library returns LibraryNode:
-	{LibraryNode}
-	'librarynode' name=EString 'namespace' namespace=EString ('implements' implements=[Node|EString])?
+Library returns TemplateNode:
+	{TemplateNode}
+	'templatenode' name=EString 'namespace' namespace=EString ('implements' implements=[Node|EString])? (generateartifact?='generate')?
 	'{'
 		"language" language+=LanguageType (',' language+=LanguageType)*
 		('parameters'
@@ -145,7 +145,7 @@ Library returns LibraryNode:
  
 Node returns Node:
 	{Node}
-	'node' name=EString "namespace" namespace=EString ("implements" implements=[Node|EString])?
+	'node' name=EString "namespace" namespace=EString ("implements" implements=[Node|EString])? (generateartifact?='generate')?
 	'{'
 		"language" language+=LanguageType (',' language+=LanguageType)*
 		('parameters'
